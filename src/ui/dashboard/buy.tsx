@@ -627,7 +627,9 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
                                 </Box>
                                 <Box className={classes.worth}>
-                                    {(resultOfRamaPriceInUSD?.data && buyInput) &&
+                                    {(resultOfRamaPriceInUSD?.data && buyInput) ?(
+
+                
                                         <>
                                             <Box className={classes.box_List}>
                                                 <Image src={dollar} alt={""} width={40} />
@@ -655,7 +657,8 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
                                                 </Typography>
                                             </Box> */}
                                         </>
-                                    }
+                                    ) :null
+                                }
                                     <Box className={classes.box_List}>
                                         <Image src={shield} alt={""} width={50} />
                                         <Typography color={'#999'}>TSIB WORTH : <Typography component={'span'} color={'#fff'}>{
