@@ -12,8 +12,8 @@ import Linebx2 from '../../icons/Linebx2.svg'
 
 const useStyles = makeStyles({
     mainBox: {
-        backgroundColor: '#101012',
-        border: '1px solid #1D1D20',
+        backgroundColor: '#311250',
+        border: '1px solid #595c61',
         padding: '30px 20px',
         display: 'flex',
          
@@ -63,7 +63,7 @@ const Conduct = () => {
                     <Box sx={{
                         width: '50%',
                         height: '1px',
-                        background: 'linear-gradient(90deg, #071616, #00FFFF, #071616)',
+                        background: 'linear-gradient(90deg, #2d1150, #FBEF03, #2d1150)',
                         margin: '3rem auto 3rem auto',
                         '@media(max-width : 600px)':{
                         margin: '1.5rem auto 1.5rem auto', 

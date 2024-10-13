@@ -7,7 +7,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Heading from "@/theme/components/heading";
 
 const StyledLink = styled(Link)(({ theme }) => ({
-    backgroundColor: '#00FFFF !important',
+    background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
     color: '#000 !important',
     padding: '12px 22px',
     display: 'inline-flex',
@@ -89,7 +89,7 @@ function Brick() {
         ]
     };
 
-    const para="The MumbleChat platform is developed using open source principles, allowing developers from around the world to contribute code, suggest improvements, and participate in the platform's evolution. - Contributions to the MumbleChat project are welcomed and encouraged, fostering a collaborative and inclusive development enviroment."
+    const para="The Tosibba platform is developed using open source principles, allowing developers from around the world to contribute code, suggest improvements, and participate in the platform's evolution. - Contributions to the Tosibba project are welcomed and encouraged, fostering a collaborative and inclusive development enviroment."
     return (
         <Box className="slider-container">
              
@@ -99,7 +99,7 @@ function Brick() {
                 <Box sx={{
                     width: '30%',
                     height: '1px',
-                    background: 'linear-gradient(90deg, #071616, #00FFFF, #071616)',
+                    background: 'linear-gradient(90deg, #2d1150, #FBEF03, #2d1150)',
                     margin: '3rem auto 3rem auto',
                     '@media(max-width : 600px)':{
                         margin: '1.5rem auto 1.5rem auto', 
@@ -111,8 +111,8 @@ function Brick() {
                             <Box key={index}>
                                 <Box sx={{ margin: '0rem 1rem' }}>
                                     <Box sx={{ textAlign: 'center',
-                                        backgroundColor:'#101012',
-                                        border:'1px solid #1D1D20',
+                                        backgroundColor:'#311250',
+                                        border:'1px solid #595c61',
                                         padding:'10px',
                                         borderRadius:'12px'
                                      }}>

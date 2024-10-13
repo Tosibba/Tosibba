@@ -14,13 +14,13 @@ const Accordion_list = [
     },
     {
         id: 2,
-        title: 'How EF Mining and Reward Tiers work.',
-        text: 'When you participate in the ICO by buying EF tokens, those tokens are locked in a contract for 365 days. As a result, you earn more tokens over time through a process called minining. The basic idea is that you get a small percentage of extra tokens every hour based on the amount you initially locked.'
+        title: 'How TSIB Mining and Reward Tiers work.',
+        text: 'When you participate in the ICO by buying TSIB tokens, those tokens are locked in a contract for 365 days. As a result, you earn more tokens over time through a process called minining. The basic idea is that you get a small percentage of extra tokens every hour based on the amount you initially locked.'
     },
     {
         id: 3,
         title: 'What is  self minining process.',
-        text: 'The minining process in the ICO allows users to buy EF tokens from the ICO portal. The purchased EF tokens are instantly locked in a contract, and users earn a basic minining rate of 0.001% per hour on their locked amount. Additionally, users can increase their minining percentage by referring direct users, according to the Self minining  tiers. '
+        text: 'The minining process in the ICO allows users to buy TSIB tokens from the ICO portal. The purchased TSIB tokens are instantly locked in a contract, and users earn a basic minining rate of 0.001% per hour on their locked amount. Additionally, users can increase their minining percentage by referring direct users, according to the Self minining  tiers. '
     },
     {
         id: 4,
@@ -56,7 +56,7 @@ const Faqs = () => {
                     <Box sx={{
                         width: '30%',
                         height: '1px',
-                        background: 'linear-gradient(90deg, #071616, #00FFFF, #071616)',
+                        background: 'linear-gradient(90deg, #2d1150, #FBEF03, #2d1150)',
                         margin: '3rem auto 3rem auto',
                         '@media(max-width : 600px)': {
                             margin: '1.5rem auto 1.5rem auto',
@@ -73,13 +73,14 @@ const Faqs = () => {
                                 expanded={expanded === `panel${index}` as any}
                                 onChange={handleChange(`panel${index}`)}
                                 sx={{
-                                    backgroundColor: '#1C1C20',
+                                    backgroundColor: '#311250',
+                                    border:'1px solid #595c61',
                                     borderRadius: '6px',
                                     boxShadow: 'inherit',
                                     marginTop: '1rem',
                                     padding: '5px',
                                     '&.Mui-expanded': {
-                                        background: 'linear-gradient(359deg, #00FFFF, #00FFFF)',
+                                        background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)',
                                         marginTop: '1rem',
                                         color: '#000'
                                     },

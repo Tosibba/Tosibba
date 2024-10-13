@@ -20,7 +20,6 @@ import dollar from '../../icons/t1.svg'
 import r2 from '../../icons/r2.svg'
 import AddressCopy from "@/theme/components/addressCopy";
 import linkbtnimg from '../../icons/linkbtnimg.svg'
-import Refer from "./refer";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect, useState } from "react";
@@ -46,6 +45,7 @@ import { toast } from "react-toastify";
 import Buy from "./buy";
 import HomeTab from "./homeTab";
 import useCheckAllowance from "@/hooks/useCheckAllowance";
+import Refer from "./refer";
 
 const useStyles = makeStyles({
     mainDiv: {
@@ -507,15 +507,24 @@ const Dsboard = (props: CircularProgressProps) => {
                     </Grid>
                 </Box>
 
-                <HomeTab 
+                 
+                    <HomeTab 
                   resultOfReferralDetail={resultOfReferralDetail}
                   resultOfRusdBalance={resultOfRusdBalance} 
                   resultOfEfTokenPrice={resultOfEfTokenPrice}
                 //   resultOfCheckAllowance={resultOfCheckAllowance}
                   />
+                     <Box mt={4}/>
+                    <Refer resultOfReferralDetail={resultOfReferralDetail} />
+                    
+              
 
 
-                <Refer resultOfReferralDetail={resultOfReferralDetail} />
+
+                
+
+
+               
 
             </Box>
 

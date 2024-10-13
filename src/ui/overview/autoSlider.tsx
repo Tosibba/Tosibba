@@ -89,7 +89,7 @@ const AutoSlider: React.FC = () => {
           slidesToScroll: 1
         }
       },
-       
+
     ]
   };
 
@@ -99,11 +99,11 @@ const AutoSlider: React.FC = () => {
       <Box sx={{
         width: '50%',
         height: '1px',
-        background: 'linear-gradient(90deg, #071616, #00FFFF, #071616)',
+        background: 'linear-gradient(90deg, #2d1150, #FBEF03, #2d1150)',
         margin: '3rem auto 3rem auto',
-        '@media(max-width : 600px)':{
-                        margin: '1.5rem auto 1.5rem auto', 
-                    }
+        '@media(max-width : 600px)': {
+          margin: '1.5rem auto 1.5rem auto',
+        }
       }} />
       <SliderWrapper>
         <Slider {...settings}>

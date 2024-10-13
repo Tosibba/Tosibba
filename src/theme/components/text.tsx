@@ -11,7 +11,7 @@ const Text=({text}:props)=>{
               '@media(max-width : 1200px)':{
                 fontSize:'17px'
               }
-            }} fontSize={20} color={'#fff'}>{text}</Typography>
+            }} fontSize={18} color={'#fff'}>{text}</Typography>
         </>
     )
 }

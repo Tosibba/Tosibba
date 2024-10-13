@@ -112,9 +112,13 @@ export default function HomeTab({resultOfRusdBalance,resultOfEfTokenPrice}:any) 
     return (
         <Box  >
 
+<Investing 
+                resultOfRusdBalance={resultOfRusdBalance} 
+                resultOfEfTokenPrice={resultOfEfTokenPrice}
+                resultOfCheckAllowance={resultOfCheckAllowance}
+                />
 
-
-            <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', padding:'1rem 1rem 2rem 1rem', marginTop: '1.5rem' }}>
+            {/* <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', padding:'1rem 1rem 2rem 1rem', marginTop: '1.5rem' }}>
 
                 <Box sx={{ textTransform: 'capitalize', }}>
                     <Tabs
@@ -156,7 +160,7 @@ export default function HomeTab({resultOfRusdBalance,resultOfEfTokenPrice}:any) 
                  />
                 </CustomTabPanel>
                  
-            </Box>
+            </Box> */}
         </Box>
     );
 }

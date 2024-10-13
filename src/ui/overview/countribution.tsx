@@ -23,7 +23,7 @@ const useStyles = makeStyles({
         marginTop: '2.5rem'
     },
     grad: {
-        background: 'linear-gradient(286deg, #00FFFF 0%, #00FFFF 47.6%, #080808 98.23%)',
+        background: 'linear-gradient(286deg, #FBEF03 0%, #FBEF03 47.6%, #311250 98.23%)',
         padding: '14px 10px',
         borderRadius: '30px',
         width: '80%'
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
         textAlign: 'center'
     },
     btn: {
-        backgroundColor: '#00FFFF !important',
+        background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
         color: '#000 !important',
         padding: '14px 22px',
         display: 'inline-flex',
@@ -54,14 +54,14 @@ const useStyles = makeStyles({
     },
     btn2: {
         backgroundColor: '#transparent !important',
-        color: '#00FFFF',
+        color: '#FBEF03',
         padding: '14px 22px',
         display: 'inline-flex',
         textDecoration: 'none',
         fontWeight: '700 !important',
         borderRadius: '5rem',
         transition: '0.5s',
-        border: '1px solid #00FFFF',
+        border: '1px solid #FBEF03',
         '&:hover': {
             transform: 'translateX(5px)'
         }
@@ -134,8 +134,8 @@ const Countribution = ({ramaPriceInUSD,ramaBalanceOfIco}:{ramaPriceInUSD:number|
                     {/* <SliderWithProgress/> */}
                     <Box
                         sx={{
-                            backgroundColor: '#101012',
-                            border: '1px solid #1D1D20',
+                            backgroundColor: '#311250',
+                            border: '1px solid #595c61',
                             padding: '4px',
                             borderRadius: '30px',
                             marginTop: '1rem'
@@ -146,7 +146,7 @@ const Countribution = ({ramaPriceInUSD,ramaBalanceOfIco}:{ramaPriceInUSD:number|
 
                     <Box className={classes.datacount}>
                         <Typography sx={{ '@media(max-width : 600px)': { fontSize: '15px' } }} fontWeight={600} variant="h5" color={'#fff'}>{ramaBalanceOfIco?ramaBalanceOfIco.toFixed(2):0} RAMA raised</Typography>
-                        <Typography sx={{ '@media(max-width : 600px)': { fontSize: '15px' } }} fontWeight={600} variant="h5" color={'#fff'}>1 RAMA = ${ramaPriceInUSD?ramaPriceInUSD.toFixed(4):'0.1450'} = {ramaPriceInUSD?(ramaPriceInUSD/0.05).toFixed(4):(0.145/0.05).toFixed(4)} EF</Typography>
+                        <Typography sx={{ '@media(max-width : 600px)': { fontSize: '15px' } }} fontWeight={600} variant="h5" color={'#fff'}>1 RAMA = ${ramaPriceInUSD?ramaPriceInUSD.toFixed(4):'0.1450'} = {ramaPriceInUSD?(ramaPriceInUSD/0.05).toFixed(4):(0.145/0.05).toFixed(4)} TSIB</Typography>
                     </Box>
                 </Container>
 

@@ -8,9 +8,8 @@ import dynamic from "next/dynamic";
 
 
 
-
-const Dashboard = dynamic(
-  () => import("@/ui/dashboard/dashboardcmp"),
+const Homecmp = dynamic(
+  () => import("@/ui/overview/homecmp"),
   {
     ssr: false,
   }
@@ -19,7 +18,7 @@ const Dashboard = dynamic(
 const Home = () => {
 
   return (
-    <Dashboard />
+    <Homecmp />
   );
 }
 export default Home;

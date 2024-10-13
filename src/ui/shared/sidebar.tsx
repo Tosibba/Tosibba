@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 
 
 const StyledMenu = styled(Link)(({ theme }) => ({
-    backgroundColor: '#00FFFF !important',
+    background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
     color: '#000 !important',
     padding: '14px',
     display: 'inline-flex',
@@ -81,7 +81,7 @@ export default function Sidebar() {
                     onClick={toggleDrawer(anchor, false)}
                     onKeyDown={toggleDrawer(anchor, false)}
                 >
-                    <Link href={'#'} > <CloseIcon sx={{ color: '#00FFFF' }} /> </Link>
+                    <Link href={'#'} > <CloseIcon sx={{ color: '#FBEF03' }} /> </Link>
 
 
 
@@ -108,7 +108,7 @@ export default function Sidebar() {
                     <Drawer
                     sx={{
                         '& .MuiDrawer-paper': {
-                            backgroundColor: '#101012', // Your desired background color
+                            backgroundColor: '#311250', // Your desired background color
                         },
                     }}
                         anchor={anchor}

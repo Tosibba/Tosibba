@@ -44,6 +44,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { extractDetailsFromError } from "@/lib/extractDetailsFromError";
 import { toast } from "react-toastify";
 import useCheckAllowance from "@/hooks/useCheckAllowance";
+import SelectDrop from "@/theme/components/selectDrop";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import HoverTool from "@/theme/components/hoverTool";
 
 const useStyles = makeStyles({
     mainDiv: {
@@ -61,14 +68,14 @@ const useStyles = makeStyles({
     step__one_box: {
         backgroundColor: '#311250',
         borderRadius: '12px',
-        padding:'1rem',
+        padding: '1rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         '@media(max-width : 600px)': {
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap:'1rem'
+            gap: '1rem'
         }
     },
     Top_hding: {
@@ -112,11 +119,10 @@ const useStyles = makeStyles({
     },
     list___bx: {
         backgroundColor: '#311250',
-        border: '1px solid #FBEF0347',
-        padding: '1rem',
+        padding: '1rem 0.5rem',
         borderRadius: '12px',
         textAlign: 'center',
-        height: '100%'
+         
     },
     step__three: {
         border: '1px solid #595c61',
@@ -149,7 +155,7 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-marginTop:'10px'
+        marginTop: '10px'
     },
     rama__log: {
         backgroundColor: '#311250',
@@ -182,7 +188,7 @@ marginTop:'10px'
         display: 'flex',
         padding: '2px',
         marginTop: '0.5rem',
-        marginBottom:'0.5rem'
+        marginBottom: '0.5rem'
     },
     apply_btn__wrap: {
         backgroundColor: '#311250',
@@ -321,10 +327,10 @@ marginTop:'10px'
         border: '1px solid red',
 
     },
-    box_List:{
-        display:'flex',
-        alignItems:'center',
-        gap:'10px'
+    box_List: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px'
     }
 
 });
@@ -344,9 +350,17 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 
-const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:any) => {
+ 
+
+const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAllowance }: any) => {
     const classes = useStyles();
     const searchParams = useSearchParams()
+
+    const [selectedCardId, setSelectedCardId] = useState<number | null>(null); // Track selected card
+
+    const handleCardClick = (id:number) => {
+        setSelectedCardId(id); // Update the selected card
+    };
     const [buyInput, setBuyInput] = useState("")
     const [isAproveERC20, setIsApprovedERC20] = useState(true);
     const refParam = searchParams.get('ref')
@@ -357,36 +371,36 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
     const { data: blockNumber } = useBlockNumber({ watch: true })
 
 
-    const { writeContractAsync:approveWriteContractAsync, data:approveData, isPending: isPendingApproveForWrite} = useWriteContract(
+    const { writeContractAsync: approveWriteContractAsync, data: approveData, isPending: isPendingApproveForWrite } = useWriteContract(
         {
-            mutation:{
-               onSettled(data, error, variables, context) {
-                   if(error){
-                       toast.error(extractDetailsFromError(error.message as string) as string)
-                   }else{
-                      setIsApprovedERC20(true)
-                       toast.success("Your TSIB Approved successfully")
-                   }
-               },
+            mutation: {
+                onSettled(data, error, variables, context) {
+                    if (error) {
+                        toast.error(extractDetailsFromError(error.message as string) as string)
+                    } else {
+                        setIsApprovedERC20(true)
+                        toast.success("Your TSIB Approved successfully")
+                    }
+                },
             }
-           }
+        }
     )
-    const { isLoading:isLoadingApprove } = useWaitForTransactionReceipt({
+    const { isLoading: isLoadingApprove } = useWaitForTransactionReceipt({
         hash: approveData,
     })
 
-    const { writeContractAsync, data, isPending: isPendingBuyForWrite} = useWriteContract(
+    const { writeContractAsync, data, isPending: isPendingBuyForWrite } = useWriteContract(
         {
-            mutation:{
-               onSettled(data, error, variables, context) {
-                   if(error){
-                       toast.error(extractDetailsFromError(error.message as string) as string)
-                   }else{
-                       toast.success("Your TSIB Investing successfully")
-                   }
-               },
+            mutation: {
+                onSettled(data, error, variables, context) {
+                    if (error) {
+                        toast.error(extractDetailsFromError(error.message as string) as string)
+                    } else {
+                        toast.success("Your TSIB Investing successfully")
+                    }
+                },
             }
-           }
+        }
     )
     const { isLoading } = useWaitForTransactionReceipt({
         hash: data,
@@ -402,7 +416,7 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
 
 
     const handleMax = () => {
-        setBuyInput((formatEther?.(BigInt?.(resultOfRusdBalance?.data?  resultOfRusdBalance?.data?.toString() : 0))))
+        setBuyInput((formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))))
     }
 
     // const resultOfEfTokenPrice = useReadContract({
@@ -449,19 +463,19 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
     //     spenderAddress: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
     //   })
 
-        // console.log({resultOfCheckAllowance});
-        
+    // console.log({resultOfCheckAllowance});
+
     useEffect(() => {
-            if (resultOfCheckAllowance  && address) {
-              const price = parseFloat(buyInput===""?"25": buyInput) 
-              const allowance = parseFloat(formatEther?.(resultOfCheckAllowance.data??0))
-              if (allowance >= price) {
+        if (resultOfCheckAllowance && address) {
+            const price = parseFloat(buyInput === "" ? "25" : buyInput)
+            const allowance = parseFloat(formatEther?.(resultOfCheckAllowance.data ?? 0))
+            if (allowance >= price) {
                 setIsApprovedERC20(true)
-              }else{
+            } else {
                 setIsApprovedERC20(false)
             }
         }
-          }, [resultOfCheckAllowance,address,buyInput]);
+    }, [resultOfCheckAllowance, address, buyInput]);
 
     // use to refetch
     useEffect(() => {
@@ -470,9 +484,44 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
         // queryClient.invalidateQueries({ queryKey: resultOfRusdBalance.queryKey })
         // queryClient.invalidateQueries({ queryKey: resultOfEfTokenPrice.queryKey })
         // queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    }, [blockNumber, queryClient,resultOfCheckAllowance])
+    }, [blockNumber, queryClient, resultOfCheckAllowance])
 
-    
+    const initialLocationsData2 = [
+        {
+            id: 0,
+            name: 'Left',
+        },
+        {
+            id: 1,
+            name: 'Right',
+        },
+    ];
+
+
+    const Box__list = [
+
+        {
+            id: 0,
+            title: '0.33% Daily',
+            data: `Withdraw period 20 months`,
+            package: 'A'
+
+        },
+        {
+            id: 1,
+            title: '0.44% Daily',
+            data: `Withdraw period 15 months`,
+            package: 'B'
+        },
+        {
+            id: 2,
+            title: '0.55% Daily',
+            data: `Withdraw period 12 months`,
+            package: 'C'
+        },
+
+
+    ]
 
     return (
         <>
@@ -481,7 +530,7 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Box className={classes.step__three}>
                             <Box className={classes.coin_hding}>
-                                <Typography variant="h5" color={'#fff'}>Invest Coins</Typography>
+                                <Typography variant="h5" color={'#fff'}>Stake Coins</Typography>
                             </Box>
                             <Box className={classes.middleBox}>
 
@@ -489,9 +538,9 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
                                     <Typography>  <Typography component={'span'} color={'#fff'}>Private Sale</Typography></Typography>
                                 </Box> */}
 
-                                
+
                                 <Box className={classes.currentsale2} mt={2}>
-                                <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
+                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
                                             formatEther?.(BigInt?.(resultOfEfTokenPrice?.data ? resultOfEfTokenPrice?.data?.toString() : 0))
@@ -504,6 +553,43 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
                                     <Image src={rmesta} alt={""} />
                                     <Typography variant="h5" fontWeight={500} color={'#fff'}>TSIB</Typography>
                                 </Box>
+
+                                <Box className={classes.step__two}>
+                                    <Grid container spacing={2}>
+                                        {Box__list.map((item, index) => (
+                                            <Grid key={index} item lg={4} md={4} sm={12} xs={12}>
+                                                <Box 
+                                                 
+                                                  sx={{ textAlign: 'center',
+                                                   
+                                                   
+
+                                                   }}>
+                                                    <Typography mb={1} color={'#fff'}>package {item.package}</Typography>
+                                                </Box>
+                                                <Box className={classes.list___bx}
+                                                onClick={() => handleCardClick(item.id)}
+                                                sx={{
+                                                    border: selectedCardId === item.id ? '1px solid #FBEF03' : '1px solid #595c61', // Border change on selection
+                                                    cursor: 'pointer',
+                                                }}>
+
+                                                    <Typography fontSize={14} color={'#fff'}>{item.title}</Typography>
+                                                    <Typography fontSize={14} color={'#fff'} fontWeight={600} variant="h6">{item.data}</Typography>
+                                                    <Typography fontSize={14} color={'#fff'}>Total 200%</Typography>
+
+                                                </Box>
+                                            </Grid>
+                                        ))}
+
+                                    </Grid>
+                                </Box>
+
+                              
+
+
+                                <Box mt={2} />
+
                                 <Box className={classes.max_btn__wrap}>
                                     <InputBase
                                         value={buyInput}
@@ -525,11 +611,30 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
                                             },
                                         }}
                                         fullWidth
-                                        placeholder={'Enter Amount in TSIB'}
+                                        placeholder={'Enter Amount in TSHB'}
                                         type={'number'}
                                     />
+
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
                                 </Box>
+                                {/* <Box sx={{
+                                display:'flex',
+                                justifyContent:'space-between',
+                                gap:'1rem',
+                                marginBottom:'1rem'
+                               }}>
+                              <Box sx={{
+                                flex:'45%'
+                              }}>
+                              <SelectDrop locationsData={initialLocationsData2} defaultId={1}/>
+                              </Box>
+                              <Box sx={{
+                                flex:'45%'
+                              }}>
+                              <SelectDrop locationsData={initialLocationsData2} defaultId={2}/>
+                              </Box>
+                               </Box> */}
+
                                 {/* <Box className={classes.worth}>
                                     {(resultOfRamaPriceInUSD?.data && buyInput) &&
                                         <>
@@ -576,88 +681,88 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
 
                                 {address ?
                                     (
-                                      !isAproveERC20 ?
-                                     (
-                                      <Button
+                                        !isAproveERC20 ?
+                                            (
+                                                <Button
 
-                                        disabled={
+                                                    disabled={
 
-                                            (isPendingApproveForWrite || isLoadingApprove)
-                                            
-                                        }
-                                        fullWidth={true}
-                                        className={classes.buy__btn}
-                                        sx={{
-                                            opacity: !(
-                                                isPendingApproveForWrite || isLoadingApprove
+                                                        (isPendingApproveForWrite || isLoadingApprove)
+
+                                                    }
+                                                    fullWidth={true}
+                                                    className={classes.buy__btn}
+                                                    sx={{
+                                                        opacity: !(
+                                                            isPendingApproveForWrite || isLoadingApprove
+                                                        )
+                                                            ? "1" : '0.3'
+                                                    }}
+                                                    onClick={async () => {
+                                                        await approveWriteContractAsync({
+                                                            abi: rusdAbi,
+                                                            address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
+                                                            functionName: 'approve',
+                                                            args: [
+                                                                chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
+                                                                ,
+                                                                Number?.(buyInput) > 0 ? parseEther?.(buyInput) : parseEther?.(BigInt((Number.MAX_SAFE_INTEGER ** 1.3)?.toString())?.toString())
+                                                            ],
+                                                            account: address
+                                                        })
+
+
+                                                    }} >Approve TSIB
+                                                    {
+                                                        (isPendingApproveForWrite || isLoadingApprove) && <CircularProgress size={18} color="inherit" />
+                                                    }
+                                                </Button>
                                             )
-                                                ? "1" : '0.3'
-                                        }}
-                                        onClick={async () => {
-                                            await approveWriteContractAsync({
-                                                abi: rusdAbi,
-                                                address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
-                                                functionName: 'approve',
-                                                args: [
-                                                    chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
-                                                    , 
-                                                    Number?.(buyInput) > 0 ? parseEther?.(buyInput) : parseEther?.( BigInt((Number.MAX_SAFE_INTEGER**1.3)?.toString())?.toString())
-                                                ],
-                                                account: address
-                                            })
+                                            : (
+                                                <Button
+
+                                                    disabled={
+
+                                                        (!buyInput || isPendingBuyForWrite || isLoading || (
+                                                            buyInput && (Number(buyInput) < 25)
+                                                        ) || (
+                                                                Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                            ) || (
+                                                                !referrerAddress || !resultOfReferralDetail?.data?.[2].result
+                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
+                                                        )
+                                                    }
+                                                    fullWidth={true}
+                                                    className={classes.buy__btn}
+                                                    sx={{
+                                                        opacity: !((
+                                                            !buyInput || isPendingBuyForWrite || isLoading || (
+                                                                buyInput && (Number(buyInput) < 25)
+                                                            ) || (
+                                                                Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                            ) || (
+                                                                !referrerAddress || !resultOfReferralDetail?.data?.[2].result
+                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
+                                                        ))
+                                                            ? "1" : '0.3'
+                                                    }}
+                                                    onClick={async () => {
+                                                        await writeContractAsync({
+                                                            abi: efInvestAbi,
+                                                            address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
+                                                            functionName: 'invest',
+                                                            args: [parseEther(buyInput), (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address)],
+                                                            account: address
+                                                        })
 
 
-                                        }} >Approve TSIB
-                                        {
-                                            (isPendingApproveForWrite || isLoadingApprove) && <CircularProgress size={18} color="inherit" />
-                                        }
-                                      </Button>
-                                      )
-                                    : (
-                                      <Button
-
-                                        disabled={
-
-                                            (!buyInput || isPendingBuyForWrite || isLoading || (
-                                                buyInput &&  (Number(buyInput) < 25) 
-                                            ) || (
-                                                    Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
-                                                ) || (
-                                                    !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                                ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
+                                                    }} >Invest
+                                                    {
+                                                        (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
+                                                    }
+                                                </Button>
                                             )
-                                        }
-                                        fullWidth={true}
-                                        className={classes.buy__btn}
-                                        sx={{
-                                            opacity: !((
-                                                !buyInput || isPendingBuyForWrite || isLoading || (
-                                                    buyInput &&  (Number(buyInput) < 25) 
-                                                ) || (
-                                                    Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
-                                                ) || (
-                                                    !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                                ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
-                                            ))
-                                                ? "1" : '0.3'
-                                        }}
-                                        onClick={async () => {
-                                            await writeContractAsync({
-                                                abi: efInvestAbi,
-                                                address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-                                                functionName: 'invest',
-                                                args: [parseEther(buyInput), (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address)],
-                                                account: address
-                                            })
-
-
-                                        }} >Invest
-                                        {
-                                            (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
-                                        }
-                                      </Button>
                                     )
-                                )
                                     :
                                     <ConnectWallet />
                                 }
@@ -697,8 +802,8 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
                                                         ':-moz-placeholder': {
                                                             color: 'fff',
                                                         },
-                                                        '@media(max-width : 600px)':{
-                                                            fontSize:'11px',
+                                                        '@media(max-width : 600px)': {
+                                                            fontSize: '11px',
                                                         }
                                                     }}
                                                     fullWidth
@@ -715,6 +820,51 @@ const Investing = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowa
 
 
                                             </Box>
+                                            {referrerAddress && /^0x[a-fA-F0-9]{40}$/.test(referrerAddress) &&
+                                              <Box sx={{
+                                                display: 'flex',
+                                                gap:'10px',
+                                                alignItems: 'center',
+                                                marginTop: '1rem'
+                                            }}>
+                                                <HoverTool Title={"Select One left side referral or Right side refferal"} />
+                                                <FormControl >
+            
+                                                    <RadioGroup
+                                                        row
+                                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                                        name="row-radio-buttons-group"
+            
+                                                    >
+                                                        <FormControlLabel value="female" control={<Radio sx={{
+                                                            color: '#FBEF03',
+            
+                                                            '&.Mui-checked': {
+                                                                color: '#FBEF03',
+                                                            },
+                                                        }} />} label="Left Joining" sx={{
+                                                            '& .MuiFormControlLabel-label': {
+                                                                color: '#fff',
+                                                            },
+                                                        }} />
+                                                        <FormControlLabel value="male" control={<Radio
+                                                            sx={{
+                                                                color: '#FBEF03',
+                                                                '&.Mui-checked': {
+                                                                    color: '#FBEF03',
+                                                                },
+                                                            }} />} label="Right Joining" sx={{
+                                                                '& .MuiFormControlLabel-label': {
+                                                                    color: '#fff',
+                                                                },
+                                                            }} />
+            
+            
+                                                    </RadioGroup>
+                                                </FormControl>
+            
+                                                
+                                            </Box>}
                                             {
                                                 (referrerAddress && !resultOfReferralDetail?.data?.[2].result) && (
 

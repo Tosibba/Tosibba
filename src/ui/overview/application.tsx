@@ -11,7 +11,7 @@ import download_btn02 from '../../icons/download_btn02.png'
 
 const CustomTooltip = withStyles((theme) => ({
     tooltip: {
-        backgroundColor: '#00FFFF !important', // Change to your desired background color
+        backgroundColor: '#FBEF03 !important', // Change to your desired background color
         color: '#000 !important',          // Change to your desired text color
         fontSize: '18px !important',
     },
@@ -30,8 +30,8 @@ const useStyles = makeStyles({
         alignItems: 'center',
         borderRadius: '6rem',
         justifyContent: 'center',
-        backgroundColor: '#000',
-        boder: '1px solid #1D1D20'
+        backgroundColor: '210d3e',
+        
     },
     wrap: {
         display: 'flex',
@@ -60,8 +60,8 @@ const useStyles = makeStyles({
         }
     },
     mainBox: {
-        backgroundColor: '#101012',
-        border: '1px solid rgba(43 44 56 / 46%)',
+        backgroundColor: '#311250',
+        border: '1px solid #595c61',
         padding: '2rem 2rem 0rem 2rem',
         margin: '0rem 2rem 0rem 2rem',
         borderRadius: '12px',
@@ -70,6 +70,7 @@ const useStyles = makeStyles({
         }
     },
     image__box: {
+        filter:'hue-rotate(45deg)',
         '@media(max-width : 1200px)': {
             width: '100%',
             height: '100%'

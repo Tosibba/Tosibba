@@ -8,15 +8,15 @@ import linebox from '../../icons/linebox.svg'
 
 const useStyles = makeStyles({
   mainBox: {
-    backgroundColor: '#101012',
-    border: '1px solid #1D1D20',
+    backgroundColor: '#311250',
+    border: '1px solid #595c61',
     borderRadius: '12px',
     padding: '1rem 0.4rem',
     textAlign:'center',
     height:'100%',
     transition:'0.5s',
     '&:hover':{
-      border: '1px solid #00FFFF',
+      border: '1px solid #FBEF03',
     },
     '@media(max-width : 600px)':{
       flexWrap: 'wrap !important',

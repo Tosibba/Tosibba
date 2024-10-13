@@ -60,24 +60,13 @@ const Bnr = ({resultOfIcoDetail}:any) => {
     const targetDate = new Date(resultOfIcoDetail?.data ?Number(resultOfIcoDetail?.data?.startAt)*1000: new Date().getTime());
     return (
         <>
-            <Box className={classes.dotBox} mt={3}>
-                <Heading heading={'Discover the Next Big Opportunity:'} />
-                <Heading heading={'Our ICO is Live'} />
-            </Box>
-            {/* <Box className={classes.dotBox} mt={2}>
-                <Text text={'A new smart block chain based marketplace for trading digital'} />
-                <Text text={'goods & assets according.'} />
-            </Box> */}
-            <Box className={classes.dotBox} mt={2}>
-                <Text text={'MUMBLE Chat: Secure, decentralized messaging app powered by'} />
-                <Text text={"ramestta's web3 technology."} />
-            </Box>
+            
 
-            <Box>
-                <Box className={classes.line}/>
-            </Box>
+            
 
-            <Box>
+            <Box sx={{
+                marginTop:'7rem'
+            }}>
                 <Grid container spacing={2}>
                     <Grid item lg={3} md={3} sm={12} xs={12}>
                         <Box className={classes.dotBox}>
@@ -86,7 +75,19 @@ const Bnr = ({resultOfIcoDetail}:any) => {
 
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
-                        <CountdownTimer targetDate={targetDate} />
+                        {/* <CountdownTimer targetDate={targetDate} /> */}
+                        <Box className={classes.dotBox} mt={3}>
+                <Heading heading={'Discover the Next Big Opportunity:'} />
+                <Heading heading={'Our ICO is Live'} />
+            </Box>
+            {/* <Box className={classes.dotBox} mt={2}>
+                <Text text={'A new smart block chain based marketplace for trading digital'} />
+                <Text text={'goods & assets according.'} />
+            </Box> */}
+            <Box className={classes.dotBox} mt={2}>
+                <Text text={'Tosibba: Secure, decentralized messaging app powered by'} />
+                <Text text={"ramestta's web3 technology."} />
+            </Box>
                     </Grid>
                     <Grid item lg={3} md={3} sm={12} xs={12}>
                         <Box className={classes.dotBox}>

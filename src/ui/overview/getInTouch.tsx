@@ -8,7 +8,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import pdf from '../../icons/pdf.svg'
 
 const StyledLink = styled(Link)(({ theme }) => ({
-    backgroundColor: '#00FFFF !important',
+    background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
     color: '#000 !important',
     padding: '12px 30px',
     display: 'inline-flex',
@@ -33,8 +33,8 @@ const useStyles = makeStyles({
         textAlign: 'center'
     },
     Left__box: {
-        backgroundColor: '#101012',
-        border: '1px solid #1D1D20',
+        backgroundColor: '#311250',
+        border: '1px solid #595c61',
         padding: '2rem',
         borderRadius: '12px',
         height: '100%',
@@ -43,11 +43,11 @@ const useStyles = makeStyles({
         }
     },
     input__box: {
-        backgroundColor: '#080808',
+        backgroundColor: '#2a0e44',
         padding: '6px 10px',
         borderRadius: '12px',
         width: '100%',
-        border: '1px solid #063939',
+        border: '1px solid #d8b32087',
 
 
     },
@@ -63,20 +63,20 @@ const useStyles = makeStyles({
 
     },
     input__box__2: {
-        backgroundColor: '#080808',
+        backgroundColor: '#2a0e44',
         padding: '6px 10px',
         borderRadius: '12px',
         width: '100%',
         marginTop: '1.5rem',
-        border: '1px solid #063939'
+        border: '1px solid #d8b32087'
     },
     send: {
         textAlign: 'center',
         marginTop: '1.5rem'
     },
     pdf__box: {
-        backgroundColor: '#080808',
-        border: '1px solid #063939',
+        backgroundColor: '#2a0e44',
+        border: '1px solid #d8b32087',
         padding: '2rem 1rem',
         borderRadius: '12px',
         textAlign: 'center'
@@ -129,7 +129,7 @@ const GetInTouch = () => {
                         <Box sx={{
                             width: '30%',
                             height: '1px',
-                            background: 'linear-gradient(90deg, #071616, #00FFFF, #071616)',
+                            background: 'linear-gradient(90deg, #2d1150, #FBEF03, #2d1150)',
                             margin: '3rem auto 3rem auto',
                             '@media(max-width : 600px)': {
                                 margin: '1.5rem auto 1.5rem auto',
@@ -153,7 +153,7 @@ const GetInTouch = () => {
                                         <InputBase
                                             sx={{
                                                 flex: 1,
-                                                color: '#05B7B8',
+                                                color: '#fff',
                                                 width: '100%',
                                                 padding: '0.3rem 0.5rem',
                                                 ':-moz-placeholder': {
@@ -169,7 +169,7 @@ const GetInTouch = () => {
                                         <InputBase
                                             sx={{
                                                 flex: 1,
-                                                color: '#05B7B8',
+                                                color: '#fff',
                                                 width: '100%',
                                                 padding: '0.3rem 0.5rem',
                                                 ':-moz-placeholder': {
@@ -186,7 +186,7 @@ const GetInTouch = () => {
                                     <InputBase
                                         sx={{
                                             flex: 1,
-                                            color: '#05B7B8',
+                                            color: '#fff',
                                             width: '100%',
                                             padding: '0.3rem 0.5rem',
                                             ':-moz-placeholder': {

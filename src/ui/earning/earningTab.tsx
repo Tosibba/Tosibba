@@ -100,7 +100,7 @@ export default function EarningTab() {
 
                 <Box sx={{ textTransform: 'capitalize', }}>
                     <Tabs
-                        variant="scrollable" // Ensure the tabs take up the full width
+                         variant="fullWidth"
                         sx={{
                             backgroundColor: '#311250',
                             borderRadius: '8px',
@@ -119,8 +119,8 @@ export default function EarningTab() {
                             }
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 5px',flex: 'none', } }} label="My Package" {...a11yProps(0)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', margin: '0px 0px 0px 10px', flex: 1, '@media(max-width : 600px)': { padding: '12px 5px',flex: 'none', } }} label="Team" {...a11yProps(1)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', margin: '0px 0px 0px 10px', flex: 1, '@media(max-width : 600px)': { padding: '12px 5px',flex: 'none', } }} label="History" {...a11yProps(2)} />
+                        {/* <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', margin: '0px 0px 0px 10px', flex: 1, '@media(max-width : 600px)': { padding: '12px 5px',flex: 'none', } }} label="Team" {...a11yProps(1)} /> */}
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', margin: '0px 0px 0px 10px', flex: 1, '@media(max-width : 600px)': { padding: '12px 5px',flex: 'none', } }} label="History" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
@@ -129,15 +129,15 @@ export default function EarningTab() {
                         <Footer/>
                     </Box>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
+                {/* <CustomTabPanel value={value} index={1}>
                     <Box mt={3}>
 
                         <Community />
                         <Footer/>
                     </Box>
-                </CustomTabPanel>
+                </CustomTabPanel> */}
                
-                <CustomTabPanel value={value} index={2}>
+                <CustomTabPanel value={value} index={1}>
                     <Box className={classes.MainHis}>
                         <Typography
                             sx={{

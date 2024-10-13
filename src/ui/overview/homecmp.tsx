@@ -65,11 +65,15 @@ const Homecmp = () => {
         <>
             <Box
                 sx={{
-                    backgroundColor: '#080808'
+                 
                 }}
             >
                 <Box sx={{
-                    background: 'linear-gradient(180deg, #02b3b300, #02b3b317, #02B3B3)',
+                      height: '100vh',
+                      overflowY: 'scroll',
+                }}>
+                <Box sx={{
+                    background: 'linear-gradient(180deg, #02b3b300, #02b3b317, #3f1669)',
                     margin: '0rem 1.5rem',
                     padding: '0rem 1rem 1rem 1rem',
                     borderRadius: '0px 0px 20px 20px',
@@ -101,6 +105,7 @@ const Homecmp = () => {
                 <Box component={'section'} id="contact"><GetInTouch /></Box>
 
                 <Footer />
+                </Box>
             </Box>
         </>
 

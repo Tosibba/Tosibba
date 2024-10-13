@@ -14,13 +14,13 @@ const LinkStyled = styled(Link)(({ theme }) => ({
     color: '#fff',
 
     ':hover': {
-        color: '#fbd8af'
+        color: '#FBEF03'
     }
 
 }));
 
 const LoginStyled = styled(Link)(({ theme }) => ({
-    backgroundColor: '#fbd8af !important',
+    background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
   color: '#000 !important',
   padding: '14px 22px !important',
   display: 'inline-flex',
@@ -39,8 +39,8 @@ const ListBox = styled('ul')(({ theme }) => ({
     listStyle: 'none',
     display: 'inline-flex',
     gap: '0.5rem',
-    backgroundColor: '#101012',
-    border: '1px solid #2b3139',
+    backgroundColor: '#311250',
+    border: '1px solid #595c61',
     borderRadius: '5rem',
     '@media(max-width : 1200px)': {
         display: 'inherit',
@@ -151,7 +151,7 @@ const Navbar = () => {
                         {address &&
                             <LoginStyled
                                 href={"/dashboard"}>
-                                <Typography>Dashboard</Typography>
+                                <Typography>Go to Dashboard</Typography>
                             </LoginStyled>
                         }
                         <Box mt={2}/>

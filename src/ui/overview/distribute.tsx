@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material"
 import DistributeTab from "./distributeTab"
 import Image from "next/image"
-import chart_img from '../../icons/banner_shape01.png'
+import chart_img from '../../icons/banner_shape01.svg'
 import { makeStyles } from '@mui/styles';
 import Text from "@/theme/components/text";
 
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
         borderRadius: '8px',
         marginTop: '0.4rem',
         '&:hover': {
-            background: 'linear-gradient(85deg, #00FFFF, #010314)',
+            background: 'linear-gradient(85deg, #FBEF03, #01031400)',
         },
         '@media(max-width : 1200px)':{
             gap:'8px',
@@ -25,8 +25,8 @@ const useStyles = makeStyles({
         }
     },
     round: {
-        backgroundColor: '#101012',
-        border:'1px solid #1D1D20',
+        backgroundColor: '#311250',
+        border:'1px solid #595c61',
         width: '30px',
         height: '30px',
         display: 'flex',
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     line: {
         width: '2px',
         height: '100%',
-        background: 'linear-gradient(0deg, #071616, #00FFFF, #071616)',
+        background: 'linear-gradient(0deg, #07161600, #FBEF03, #07161600)',
     }
 
 })
@@ -77,7 +77,7 @@ const Distribute = ({ramaPriceInUSD,ramaBalanceOfIco}:{ramaPriceInUSD:number|und
                         <Image src={chart_img} alt={""} />
                         </Box>
                         <Box className={classes.boxtext}>
-                           <Typography textAlign={'center'} fontSize={20} color={'#00FFFF'} fontFamily={'Bruce Forever !important'}>RAMESTTA is a decentralized, open-source blockchain</Typography>
+                           <Typography textAlign={'center'} fontSize={20} color={'#FBEF03'} fontFamily={'Bruce Forever !important'}>RAMESTTA is a decentralized, open-source blockchain</Typography>
                           
                         </Box>
 
@@ -88,7 +88,7 @@ const Distribute = ({ramaPriceInUSD,ramaBalanceOfIco}:{ramaPriceInUSD:number|und
                             </Box>
                             <Box className={classes.listItem} component={'li'}>
                                 <Typography className={classes.round} color={'#fff'}>1</Typography>
-                                <Typography color={'#fff'}>Initial Value : 1 RAMA = ${ramaPriceInUSD?ramaPriceInUSD.toFixed(4):'0.1450'} = {ramaPriceInUSD?(ramaPriceInUSD/0.05).toFixed(4):(0.145/0.05).toFixed(4)} EF</Typography>
+                                <Typography color={'#fff'}>Initial Value : 1 RAMA = ${ramaPriceInUSD?ramaPriceInUSD.toFixed(4):'0.1450'} = {ramaPriceInUSD?(ramaPriceInUSD/0.05).toFixed(4):(0.145/0.05).toFixed(4)} TSIB</Typography>
                             </Box>
                             <Box className={classes.listItem} component={'li'}>
                                 <Typography className={classes.round} color={'#fff'}>1</Typography>

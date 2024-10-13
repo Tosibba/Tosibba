@@ -45,9 +45,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const LoginStyled = styled(Link)(({ theme }) => ({
-    backgroundColor: '#00FFFF !important',
+    background: 'linear-gradient(90deg, rgb(251 239 3) 0%, rgb(251 239 3) 35%, #CEA129 100%)!important',
     color: '#000',
-    padding: '14px 22px',
+    padding: '10px 22px',
     display: 'inline-flex',
     textDecoration: 'none',
     fontWeight: '700 !important',
@@ -149,7 +149,7 @@ export default function Header() {
                     {address &&
                         <LoginStyled
                             href={"/dashboard"}>
-                            <Typography>Dashboard</Typography>
+                            <Typography>Go to Dashboard</Typography>
                         </LoginStyled>
                     }
                     <Box sx={{

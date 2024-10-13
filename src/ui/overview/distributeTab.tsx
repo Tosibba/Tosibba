@@ -105,8 +105,8 @@ export default function DistributeTab() {
                     </CustomTabPanel>
                     <Box sx={{ textAlign: 'center' }}>
                         <Box sx={{
-                            backgroundColor: '#101012',
-                            border:'1px solid #1D1D20',
+                            backgroundColor: '#311250',
+                            border:'1px solid #595c61',
                             display: 'inline-block',
                             padding: '6px 8px 8px 8px',
                             borderRadius: '30px'
@@ -119,7 +119,7 @@ export default function DistributeTab() {
                                     '.MuiTabs-indicator': {
                                         height: 46,
                                         color: '#000 !important',
-                                        background: 'linear-gradient(0deg, #00FFFF, #00FFFF)',
+                                        background: 'linear-gradient(0deg, #FBEF03, #FBEF03)',
                                         borderRadius: '30px',
                                         backgroundColor: 'transparent'
 

@@ -2,6 +2,10 @@ import { Box, Grid, Typography } from "@mui/material";
 import { makeStyles } from '@mui/styles';
 import r1 from '../../icons/r1.svg'
 import r2 from '../../icons/r2.svg'
+import r3 from '../../icons/r3.svg'
+import r4 from '../../icons/r4.svg'
+import r5 from '../../icons/r5.svg'
+import r6 from '../../icons/r6.svg'
 import AddressCopy from "@/theme/components/addressCopy";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,8 +20,8 @@ import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 const useStyles = makeStyles({
     mainDiv: {
         margin: '40px 40px 20px 40px',
-         
-        '@media(max-width : 1200px)':{
+
+        '@media(max-width : 1200px)': {
             margin: '20px 20px 20px 20px',
         }
     },
@@ -32,9 +36,9 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        '@media(max-width : 600px)':{
-            flexWrap:'wrap',
-            justifyContent:'center'
+        '@media(max-width : 600px)': {
+            flexWrap: 'wrap',
+            justifyContent: 'center'
         }
     },
     Top_hding: {
@@ -50,13 +54,13 @@ const useStyles = makeStyles({
         alignItems: 'end',
         justifyContent: 'space-between',
         padding: '1rem',
-        '@media(max-width : 1200px)':{
-            gap:'1.5rem',
-            '@media(max-width : 600px)':{
-            flexWrap:'wrap',
-            justifyContent:'center',
-            gap:'0.5rem',
-        }
+        '@media(max-width : 1200px)': {
+            gap: '1.5rem',
+            '@media(max-width : 600px)': {
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '0.5rem',
+            }
         }
     },
 
@@ -69,7 +73,7 @@ const useStyles = makeStyles({
         padding: '1rem',
         borderRadius: '12px',
         textAlign: 'center',
-        height:'100%'
+        height: '100%'
     },
     step__three: {
         border: '1px solid #595c61',
@@ -89,9 +93,9 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: '2rem',
-        '@media(max-width : 600px)':{
-            flexWrap:'wrap',
-            justifyContent:'center'
+        '@media(max-width : 600px)': {
+            flexWrap: 'wrap',
+            justifyContent: 'center'
         }
     },
     slider__img: {
@@ -151,8 +155,8 @@ const useStyles = makeStyles({
     },
     middleBox: {
         padding: '0rem 2rem 1rem 2rem',
-       '@media(max-width : 600px)':{
-            padding:'0rem 1rem 1rem 1rem'
+        '@media(max-width : 600px)': {
+            padding: '0rem 1rem 1rem 1rem'
         }
     },
     step__four: {
@@ -164,6 +168,7 @@ const useStyles = makeStyles({
     step__four2: {
         border: '1px solid #595c61',
         borderRadius: '12px',
+        
 
 
     },
@@ -181,67 +186,99 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: 1,
-        '@media(max-width : 1200px)':{
-            gap:'1rem',
-            flexWrap:'wrap',
-            justifyContent:'center'
+        '@media(max-width : 1200px)': {
+            gap: '1rem',
+            flexWrap: 'wrap',
+            justifyContent: 'center'
         }
     },
-    sldr:{
-        width:'100%'
+    sldr: {
+        width: '100%'
     },
-    coinlinewrp:{
-        '@media(max-width : 600px)':{
-            display:'none'
+    coinlinewrp: {
+        '@media(max-width : 600px)': {
+            display: 'none'
         }
     }
 
 });
 
-const Refer =({resultOfReferralDetail}:{resultOfReferralDetail: any})=>{
+const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
     const classes = useStyles();
 
-    const {address}=useAccount();
-    
-    return(
+    const { address } = useAccount();
+
+
+    const refEarning = [
+        {
+            id: 1,
+            Title: "YOUR REFERRALS",
+            data: '0.00',
+            image: r1,
+        },
+        {
+            id: 2,
+            Title: "YOUR REFERRAL EARNINGS",
+            data: '0.00',
+            image: r2,
+        },
+        {
+            id: 3,
+            Title: "YOUR LEFT SIDE EARNINGS",
+            data: '0.00',
+            image: r3,
+        },
+        {
+            id: 4,
+            Title: "YOUR RIGHT SIDE EARNINGS",
+            data: '0.00',
+            image: r4,
+        },
+        {
+            id: 5,
+            Title: "YOUR SELF EARNINGS",
+            data: '0.00',
+            image: r5,
+        },
+        {
+            id: 6,
+            Title: "YOUR ELIGIBLE REWARD",
+            data: '0.00',
+            image: r6,
+        },
+
+    ]
+
+    return (
         <>
-        <Box>
-                    <Grid container spacing={2} mt={1}>
-                        {/* <Grid item lg={5} md={5} sm={12} xs={12}>
-                            <Box className={classes.step__four}>
-                                <Typography color={'#999'}>YOUR LAST TRANSACTIONS</Typography>
-                                <Typography color={'#fff'}>There are no finalized transactions yet.</Typography>
-                            </Box>
-
-                        </Grid> */}
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box className={classes.step__four2}>
-                                <Box className={classes.referral}>
-                                    <Box>
-                                        <Typography color={'#999'}>YOUR REFERRALS</Typography>
-                                        <Typography color={'#fff'} variant="h4">{resultOfReferralDetail?.data?.[1].result>0?resultOfReferralDetail?.data?.[1].result.toString():0}</Typography>
+            <Box className={classes.step__four2}>
+               <Box sx={{
+                padding:'1rem'
+               }}>
+               <Grid container spacing={2}  >
+                            {refEarning.map((item, index) => (
+                               <Grid key={index} item lg={6} md={6} sm={12} xs={12}>
+                                <Box p={1.6} className={classes.step__four2}>
+                                    <Box sx={{
+                                        display:'flex',
+                                        justifyContent:'space-between',
+                                        alignItems:'center'
+                                    }}>
+                                    <Box >
+                                        <Typography color={'#999'}>{item.Title}</Typography>
+                                        <Typography color={'#fff'} variant="h4">{item.data}</Typography>
                                     </Box>
-                                    <Box sx={{backgroundColor:'transparent !important'}}>
-                                        <Image src={r1} alt={""} />
+                                    <Box sx={{ backgroundColor: 'transparent !important' }}>
+                                        <Image src={item.image} alt={""} />
                                     </Box>
-                                </Box>
-
-                                <Box className={classes.referral}>
-                                    <Box>
-                                        <Typography color={'#999'}>YOUR REFERRAL EARNINGS</Typography>
-                                        <Typography color={'#fff'} variant="h4">${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.toString() : 0)))}</Typography>
                                     </Box>
-                                    <Box sx={{backgroundColor:'transparent !important'}}>
-                                        <Image src={r2} alt={""} />
                                     </Box>
-                                </Box>
-
-                               <RefBottom/>
-
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Box>
+                                </Grid>
+                            ))}
+                </Grid>
+               </Box>
+                <RefBottom />
+            </Box>
         </>
     )
 }
