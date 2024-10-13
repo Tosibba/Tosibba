@@ -825,7 +825,10 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                 display: 'flex',
                                                 gap:'10px',
                                                 alignItems: 'center',
-                                                marginTop: '1rem'
+                                                marginTop: '1rem',
+                                                '@media(max-width : 600px)':{
+                                                    alignItems: 'baseline',
+                                                }
                                             }}>
                                                 <HoverTool Title={"Select One left side referral or Right side refferal"} />
                                                 <FormControl >
