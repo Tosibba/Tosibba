@@ -16,6 +16,7 @@ import useCheckAllowance from '@/hooks/useCheckAllowance';
 import { useAccount, useBlockNumber, useChainId } from 'wagmi';
 import { tsibContractAddresses } from '@/configs';
 import { useQueryClient } from '@tanstack/react-query';
+ 
 
 
 
@@ -149,7 +150,7 @@ export default function HomeTab({resultOfTsibBalance}:any) {
             />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                <Buy 
+                <Buy
                     resultOfRusdBalance={resultOfTsibBalance} 
                     // resultOftsibTokenPrice={resultOftsibTokenPrice}
                     resultOfCheckAllowance={resultOfCheckAllowance}

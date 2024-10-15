@@ -182,7 +182,7 @@ export default function DistributeTab() {
                                 </Box>
                                 <Box className={classes.listItem} component={'li'}>
                                     <Typography bgcolor={'#136F84'} className={classes.round}></Typography>
-                                    <Typography fontSize={14} color={'#fff'}>ICO, Ecosystem and Community Rewards (50%)</Typography>
+                                    <Typography fontSize={14} color={'#fff'}>Staking, Ecosystem and Community Rewards (50%)</Typography>
                                 </Box>
                             </Box>
 

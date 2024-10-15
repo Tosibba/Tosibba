@@ -51,7 +51,7 @@ const useStyles = makeStyles({
 
 const Conduct = () => {
     const classes = useStyles();
-    const reward_cont = "The World's 1st ICO Platform That Offers Rewards"
+    const reward_cont = "The World's 1st Staking Platform That Offers Rewards"
     return (
         <>
             <Box

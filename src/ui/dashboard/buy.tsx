@@ -30,6 +30,7 @@ import { tsibTokenAbi } from "@/configs/abi/tsibTokenAbi";
 import { tsibContractAddresses } from "@/configs";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 import rusd from '../../icons/rusd.svg'
+import rlogo from '../../icons/rlogo.svg'
 
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
@@ -150,7 +151,7 @@ const useStyles = makeStyles({
     },
     rama__log: {
         backgroundColor: '#311250',
-        border: '1px solid #595c61',
+         
         borderRadius: '12px',
         display: 'flex',
         justifyContent: 'center',
@@ -353,6 +354,12 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
     const queryClient = useQueryClient()
     const { data: blockNumber } = useBlockNumber({ watch: true, })
 
+    const [selectedCardId, setSelectedCardId] = useState<number>(0); // Track selected card
+
+    const handleCardClick = (id:number) => {
+        setSelectedCardId(id); // Update the selected card
+    };
+
     const { writeContractAsync, data, isPending: isPendingBuyForWrite } = useWriteContract(
         {
             mutation: {
@@ -484,7 +491,25 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
     //     queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
     // }, [blockNumber, queryClient, balanceOfRama, resultOfSaleDetails, resultOfUserContribution, resultOfRamaPriceInUSD, resultOfBalance, resultOfUserTeamReward, resultOfReferralDetail])
 
+    const Box__list = [
 
+        {
+            id: 0,
+            title: 'RAMA',
+            img: rusd,
+             
+
+        },
+        {
+            id: 1,
+            title: 'RUSD',
+            img:rlogo,
+            
+        },
+        
+
+
+    ]
 
     return (
         <>
@@ -588,7 +613,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                 <Box sx={{
                                     gap:'1rem'
                                 }} className={classes.currentsale2} mt={2}>
-                                <Typography fontWeight={500} color={'#fff'}>RUSD Price : $0.00</Typography>
+                                <Typography fontWeight={500} color={'#fff'}>{selectedCardId ? "RUSD" : "RAMA"} Price : $0.00</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
                                             formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
@@ -597,10 +622,23 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     <Typography fontWeight={500} color={'#fff'}>TSIB Price: $0.00</Typography>
                                 </Box>
 
-                                <Box className={classes.rama__log}>
-                                    <Image src={rusd} alt={""} width={36} height={36}/>
-                                    <Typography variant="h5" fontWeight={500} color={'#fff'}>RUSD</Typography>
-                                </Box>
+                               <Grid container spacing={1.2}>
+                               {Box__list.map((item, index)=>(
+                                    <Grid key={index} item lg={6} md={6} sm={6} xs={6}>
+                                        <Box  className={classes.rama__log}
+                                    onClick={() => handleCardClick(item.id)}
+                                    sx={{
+                                        border: selectedCardId === item.id ? '1px solid #FBEF03' : '1px solid #595c61', // Border change on selection
+                                        cursor: 'pointer',
+                                    }}
+                                    >
+                                        <Image src={item.img} alt={""} width={36} height={36}/>
+                                        <Typography variant="h6" fontWeight={500} color={'#fff'}>{item.title}</Typography>
+                                    </Box>
+                                        </Grid>
+                                ))}
+                               </Grid>
+
                                 <Box className={classes.max_btn__wrap}>
                                     <InputBase
                                         value={buyInput}
@@ -622,7 +660,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             },
                                         }}
                                         fullWidth
-                                        placeholder={'Enter Amount in RUSD'}
+                                        placeholder={`Enter Amount in ${selectedCardId ? "RUSD" : "RAMA"}`}
                                         type={'number'}
                                     />
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
@@ -724,7 +762,8 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     //         (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
                                     //     }
                                     // </Button>
-                                    <Button
+                                    <Box>
+                                        {selectedCardId ? <Button
                                         disabled={true}
                                         fullWidth={true}
                                         className={classes.buy__btn}
@@ -734,7 +773,9 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                         }}
                                     >Approve RUSD
 
-                                    </Button>
+                                    </Button> : ''}
+                                    </Box>
+                                   
                                     :
                                     <ConnectWallet />
                                 }

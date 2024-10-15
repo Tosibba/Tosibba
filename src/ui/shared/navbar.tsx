@@ -116,13 +116,13 @@ const Navbar = () => {
                         Our Partner
                     </LinkStyled>
                 </ListItem>
-                {/* <ListItem>
+                <ListItem>
                     <LinkStyled
                         href="/#chart"
                     >
-                        ICO Chart
+                        Chart
                     </LinkStyled>
-                </ListItem> */}
+                </ListItem>
                 <ListItem>
                     <LinkStyled
                         href="/#roadmap"

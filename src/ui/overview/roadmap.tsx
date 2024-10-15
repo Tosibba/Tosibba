@@ -27,16 +27,16 @@ const useStyles = makeStyles({
 const Roadmap__item = [
     {
         top__Title: 'Q2 2024',
-        title: 'Launch of TSIB ICO',
-        point1: 'Begin initial marketing and outreach for the ICO.',
-        point2: 'Develop ICO smart contracts and platform.',
+        title: 'Launch of TSIB Staking',
+        point1: 'Begin initial marketing and outreach for the Staking.',
+        point2: 'Develop Staking smart contracts and platform.',
         point3: '',
         point4: '',
     },
     {
         top__Title: 'Q3 2024',
-        title: 'Completion of ICO All Phases',
-        point1: 'Execute ICO marketing campaigns.',
+        title: 'Completion of Staking All Phases',
+        point1: 'Execute Staking marketing campaigns.',
         point2: 'Conduct public and private sale phases.',
         point3: 'Finalize token distribution and allocation.',
         point4: '',

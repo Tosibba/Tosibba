@@ -9,18 +9,18 @@ import Heading from "@/theme/components/heading";
 const Accordion_list = [
     {
         id: 1,
-        title: 'what is ICO?',
-        text: 'ICO stands for Initial Coin Offering, a fundraising method where new cryptocurrencies or tokens are sold to investors before being listed on exchanges, often used by startups to raise capital for their projects.'
+        title: 'what is Staking?',
+        text: 'Staking stands for Initial Coin Offering, a fundraising method where new cryptocurrencies or tokens are sold to investors before being listed on exchanges, often used by startups to raise capital for their projects.'
     },
     {
         id: 2,
         title: 'How TSIB Mining and Reward Tiers work.',
-        text: 'When you participate in the ICO by buying TSIB tokens, those tokens are locked in a contract for 365 days. As a result, you earn more tokens over time through a process called minining. The basic idea is that you get a small percentage of extra tokens every hour based on the amount you initially locked.'
+        text: 'When you participate in the Staking by buying TSIB tokens, those tokens are locked in a contract for 365 days. As a result, you earn more tokens over time through a process called minining. The basic idea is that you get a small percentage of extra tokens every hour based on the amount you initially locked.'
     },
     {
         id: 3,
         title: 'What is  self minining process.',
-        text: 'The minining process in the ICO allows users to buy TSIB tokens from the ICO portal. The purchased TSIB tokens are instantly locked in a contract, and users earn a basic minining rate of 0.001% per hour on their locked amount. Additionally, users can increase their minining percentage by referring direct users, according to the Self minining  tiers. '
+        text: 'The minining process in the Staking allows users to buy TSIB tokens from the Staking portal. The purchased TSIB tokens are instantly locked in a contract, and users earn a basic minining rate of 0.001% per hour on their locked amount. Additionally, users can increase their minining percentage by referring direct users, according to the Self minining  tiers. '
     },
     {
         id: 4,

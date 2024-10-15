@@ -78,7 +78,7 @@ const Bnr = ({resultOfIcoDetail}:any) => {
                         {/* <CountdownTimer targetDate={targetDate} /> */}
                         <Box className={classes.dotBox} mt={3}>
                 <Heading heading={'Discover the Next Big Opportunity:'} />
-                <Heading heading={'Our ICO is Live'} />
+                <Heading heading={'Our Staking is Live'} />
             </Box>
             {/* <Box className={classes.dotBox} mt={2}>
                 <Text text={'A new smart block chain based marketplace for trading digital'} />
