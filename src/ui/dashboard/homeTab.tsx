@@ -113,12 +113,9 @@ export default function HomeTab({resultOfTsibBalance}:any) {
     return (
         <Box  >
 
-            <Investing
-                resultOfTsibBalance={resultOfTsibBalance}
-                resultOfCheckAllowance={resultOfCheckAllowance}
-            />
+            
 
-            {/* <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', padding:'1rem 1rem 2rem 1rem', marginTop: '1.5rem' }}>
+            <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', padding:'1rem 1rem 2rem 1rem', marginTop: '1.5rem' }}>
 
                 <Box sx={{ textTransform: 'capitalize', }}>
                     <Tabs
@@ -140,27 +137,26 @@ export default function HomeTab({resultOfTsibBalance}:any) {
                                 zIndex: '1',
                             }
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px' } }} label="Invest" {...a11yProps(0)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px' } }} label="Stake" {...a11yProps(0)} />
                         <Tab sx={{ textTransform: 'capitalize', color: "#999", border: '1px solid #595c61', borderRadius: '8px', margin: '0px 0px 0px 10px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px' } }} label="Buy" {...a11yProps(1)} />
                         
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                <Investing 
-                resultOfRusdBalance={resultOfRusdBalance} 
-                resultOftsibTokenPrice={resultOftsibTokenPrice}
+                <Investing
+                resultOfTsibBalance={resultOfTsibBalance}
                 resultOfCheckAllowance={resultOfCheckAllowance}
-                />
+            />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                 <Buy 
-                    resultOfRusdBalance={resultOfRusdBalance} 
-                    resultOftsibTokenPrice={resultOftsibTokenPrice}
+                    resultOfRusdBalance={resultOfTsibBalance} 
+                    // resultOftsibTokenPrice={resultOftsibTokenPrice}
                     resultOfCheckAllowance={resultOfCheckAllowance}
                  />
                 </CustomTabPanel>
                  
-            </Box> */}
+            </Box>
         </Box>
     );
 }

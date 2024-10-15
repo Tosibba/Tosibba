@@ -29,7 +29,7 @@ import { Address, formatEther, parseEther, zeroAddress } from "viem";
 import { tsibTokenAbi } from "@/configs/abi/tsibTokenAbi";
 import { tsibContractAddresses } from "@/configs";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
-
+import rusd from '../../icons/rusd.svg'
 
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
@@ -501,7 +501,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     <Typography>  <Typography component={'span'} color={'#fff'}>Private Sale</Typography></Typography>
                                 </Box> */}
 
-                                <Box className={classes.currentsale}>
+                                {/* <Box className={classes.currentsale}>
                                     <Box>
                                         <Typography color={'#999'}>Total Coin Sales USD</Typography>
                                         <Typography sx={{
@@ -510,7 +510,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             }
                                         }} variant="h6" color={'#fff'} fontWeight={500}> $0.00
                                         </Typography>
-                                        {/* <Typography sx={{
+                                        <Typography sx={{
                                             '@media(max-width : 600px)':{
                                                 textAlign:'center'
                                             }
@@ -520,7 +520,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                     formatEther?.(BigInt?.(resultOfSaleDetails?.data?.saleRateInUsd ? resultOfSaleDetails?.data?.saleRateInUsd.toString() : 0))) *
                                                 Number(formatEther?.(BigInt?.(resultOfSaleDetails?.data?.tokenAmount ? resultOfSaleDetails?.data?.tokenAmount.toString() : 0)))
                                                 : 0
-                                        )}</Typography> */}
+                                        )}</Typography>
                                     </Box>
                                     <Box>
                                         <Image className={classes.coinlinewrp} src={coinline} alt={""} />
@@ -532,7 +532,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                 textAlign:'center'
                                             }
                                         }} variant="h6" color={'#fff'} fontWeight={500}>$0.00</Typography>
-                                        {/* <Typography sx={{
+                                        <Typography sx={{
                                             '@media(max-width : 600px)':{
                                                 textAlign:'center'
                                             }
@@ -545,11 +545,11 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                     Number(formatEther?.(BigInt?.(resultOfSaleDetails?.data?.saleQuantity ? resultOfSaleDetails?.data?.saleQuantity.toString() : 0)))
                                                 )
                                                 : 0
-                                        )}</Typography> */}
+                                        )}</Typography>
                                     </Box>
-                                </Box>
+                                </Box> */}
 
-                                <Box mt={3} mb={0.5} sx={{ position: 'relative' }}>
+                                {/* <Box mt={3} mb={0.5} sx={{ position: 'relative' }}>
                                     <Box sx={{
                                         textAlign: 'center',
                                         position: 'absolute',
@@ -559,11 +559,11 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
 
                                     }}
                                     >
-                                        {/* <Typography color={'#fff'}> Remaining:{convertToAbbreviated(value2, 4)}</Typography> */}
+                                        <Typography color={'#fff'}> Remaining:{convertToAbbreviated(value2, 4)}</Typography>
                                         <Typography color={'#fff'}> Remaining: $0.00</Typography>
                                         </Box>
                                     <Box>
-                                        {/* <Slider
+                                        <Slider
                                     value={valueTop}
                                     // onChange={handleChange2}
                                     aria-labelledby="range-slider"
@@ -579,24 +579,27 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             boxShadow: '0 0 0 14px rgba(0, 0, 255, 0.16)', // Change this to your desired active color
                                         },
                                     }}
-                                /> */}
+                                />
                                         <BorderLinearProgress variant="determinate" value={progressValue} />
                                     </Box>
 
-                                </Box>
-                                <Box className={classes.currentsale2} mt={2}>
-                                <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
+                                </Box> */}
+                                
+                                <Box sx={{
+                                    gap:'1rem'
+                                }} className={classes.currentsale2} mt={2}>
+                                <Typography fontWeight={500} color={'#fff'}>RUSD Price : $0.00</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
                                             formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
                                     ).toFixed(2)
                                     }</Typography> */}
-                                    {/* <Typography fontWeight={500} color={'#fff'}>Pre-Sale: $0.1</Typography> */}
+                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price: $0.00</Typography>
                                 </Box>
 
                                 <Box className={classes.rama__log}>
-                                    <Image src={rmesta} alt={""} />
-                                    <Typography variant="h5" fontWeight={500} color={'#fff'}>TSIB</Typography>
+                                    <Image src={rusd} alt={""} width={36} height={36}/>
+                                    <Typography variant="h5" fontWeight={500} color={'#fff'}>RUSD</Typography>
                                 </Box>
                                 <Box className={classes.max_btn__wrap}>
                                     <InputBase
@@ -619,12 +622,12 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             },
                                         }}
                                         fullWidth
-                                        placeholder={'Enter Amount in TSIB'}
+                                        placeholder={'Enter Amount in RUSD'}
                                         type={'number'}
                                     />
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
                                 </Box>
-                                <Box className={classes.worth}>
+                                {/* <Box className={classes.worth}>
                                     {(resultOfRamaPriceInUSD?.data && buyInput) ?(
 
                 
@@ -644,7 +647,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                 </Typography>
                                             </Box>
 
-                                            {/* <Box className={classes.box_List}>
+                                            <Box className={classes.box_List}>
                                                 <Image src={rmesta} alt={""} width={40} />
                                                 <Typography color={'#999'}>RUSD PRICE:
                                                     <Typography component={'span'} color={'#fff'}> ${
@@ -653,7 +656,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                     }
                                                     </Typography>
                                                 </Typography>
-                                            </Box> */}
+                                            </Box>
                                         </>
                                     ) :null
                                 }
@@ -669,7 +672,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             ).toFixed(2) : "0.00"
                                         }</Typography></Typography>
                                     </Box>
-                                </Box>
+                                </Box> */}
 
                                 {address ?
                                     // <Button
@@ -726,16 +729,17 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                         fullWidth={true}
                                         className={classes.buy__btn}
                                         sx={{
-                                            opacity: '0.3'
+                                            opacity: '0.3',
+                                            marginTop:'1rem'
                                         }}
-                                    >Coming Soon
+                                    >Approve RUSD
 
                                     </Button>
                                     :
                                     <ConnectWallet />
                                 }
 
-                                {
+                                {/* {
                                     buyInput && (Number(buyInput) *
                                         Number(
                                             formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
@@ -749,7 +753,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     <Box className={classes.validate__box} >
                                         <Typography component={'span'} fontWeight={200} color={'red'}>Insufficient TSIB Balance</Typography>
                                     </Box>
-                                }
+                                } */}
 
                                 {/* {
                                     !showInput && (
@@ -761,7 +765,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                 {
                                     (resultOfReferralDetail?.data && resultOfReferralDetail?.data?.[3]?.result === zeroAddress) && (
                                         <Box>
-                                            <Box className={classes.apply_btn__wrap}>
+                                            {/* <Box className={classes.apply_btn__wrap}>
                                                 <InputBase
                                                     value={referrerAddress}
                                                     onChange={(e) => setReferrerAddress(e.target.value as Address)}
@@ -781,16 +785,16 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                     placeholder={'Enter Referrer Address'}
                                                     type={'text'}
                                                 />
-                                                {/* <Button sx={{
+                                                <Button sx={{
                                                     '@media(max-width : 600px)':{
                                                             fontSize:'12px',
                                                             minWidth:'50px',
                                                             padding:'6px 6px'
                                                         }
-                                                }} className={classes.max_btn} onClick={(e) => setReferrerAddress((resultOfReferralDetail?.data && resultOfReferralDetail?.data?.[3]?.result !== zeroAddress) ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress)} >Apply</Button> */}
+                                                }} className={classes.max_btn} onClick={(e) => setReferrerAddress((resultOfReferralDetail?.data && resultOfReferralDetail?.data?.[3]?.result !== zeroAddress) ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress)} >Apply</Button>
 
 
-                                            </Box>
+                                            </Box> */}
                                             {
                                                 (referrerAddress && !resultOfReferralDetail?.data?.[2].result) && (
 
@@ -798,13 +802,13 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                         <Typography component={'span'} fontWeight={200} color={'red'}>Your Referrer is Invalid</Typography>
                                                     </Box>
                                                 )}
-                                            {/* <Box className={classes.validate__box} > */}
+                                            {/* <Box className={classes.validate__box} >
                                             <Typography fontWeight={200} color={'#FBEF03'} textAlign={'center'} mt={1}>Note: If you have no any  valid referrer address then you can use this community referrer.</Typography>
                                             <Box sx={{ background: 'linear-gradient(90deg, #08080800, #FBEF03, #08080800)', gap: 1, justifyContent: 'center', padding: 1, display: 'flex', marginTop: '1rem', borderRadius: '8px', alignItems: 'center', }}>
                                                 <Typography component={'h6'} fontWeight={700} color={'#000'}>Referrer:  </Typography>
                                                 <AddressCopy hrefLink={`https://tosibba.com/?ref=0xBE4A7Ae76F7cceD70e0aec65aBd74DC84BB9D9C9`} text={"0xBE4A7Ae76F7cceD70e0aec65aBd74DC84BB9D9C9"} addresstext={"0xBE4...BB9D9C9"} />
                                             </Box>
-                                            {/* </Box> */}
+                                            </Box> */}
 
 
                                         </Box>
