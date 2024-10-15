@@ -9,8 +9,8 @@ import { ColorModeContext } from '@/context';
 import { makeStyles } from '@mui/styles';
 import Heading from '@/theme/components/heading';
 import Earning from './earning';
-import Community from './community';
-import Bounty from './bounty';
+// import Community from './community';
+// import Bounty from './bounty';
 import Footer from '../shared/footer';
 
 

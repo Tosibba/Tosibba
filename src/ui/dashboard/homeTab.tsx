@@ -14,9 +14,9 @@ import { formatEther } from 'viem';
 import { useEffect, useState } from 'react';
 import useCheckAllowance from '@/hooks/useCheckAllowance';
 import { useAccount, useBlockNumber, useChainId } from 'wagmi';
-import { efContractAddresses } from '@/configs';
+import { tsibContractAddresses } from '@/configs';
 import { useQueryClient } from '@tanstack/react-query';
- 
+
 
 
 
@@ -58,7 +58,7 @@ function a11yProps(index: number) {
 
 
 const useStyles = makeStyles({
-     
+
     box_hding: {
 
         backgroundColor: '#311250',
@@ -83,7 +83,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function HomeTab({resultOfRusdBalance,resultOfEfTokenPrice}:any) {
+export default function HomeTab({resultOfTsibBalance}:any) {
     const classes = useStyles();
     const { address } = useAccount()
     const chainId = useChainId()
@@ -98,25 +98,25 @@ export default function HomeTab({resultOfRusdBalance,resultOfEfTokenPrice}:any) 
     const theme = useTheme();
 
     const resultOfCheckAllowance = useCheckAllowance({
-        spenderAddress: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
-      })
+        spenderAddress: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking
+    })
+
 
     // use to refetch
     useEffect(() => {
-   
+
         queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
-     
-    }, [blockNumber, queryClient,resultOfCheckAllowance])
-    
+
+    }, [blockNumber, queryClient, resultOfCheckAllowance])
+
 
     return (
         <Box  >
 
-<Investing 
-                resultOfRusdBalance={resultOfRusdBalance} 
-                resultOfEfTokenPrice={resultOfEfTokenPrice}
+            <Investing
+                resultOfTsibBalance={resultOfTsibBalance}
                 resultOfCheckAllowance={resultOfCheckAllowance}
-                />
+            />
 
             {/* <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', padding:'1rem 1rem 2rem 1rem', marginTop: '1.5rem' }}>
 
@@ -148,14 +148,14 @@ export default function HomeTab({resultOfRusdBalance,resultOfEfTokenPrice}:any) 
                 <CustomTabPanel value={value} index={0}>
                 <Investing 
                 resultOfRusdBalance={resultOfRusdBalance} 
-                resultOfEfTokenPrice={resultOfEfTokenPrice}
+                resultOftsibTokenPrice={resultOftsibTokenPrice}
                 resultOfCheckAllowance={resultOfCheckAllowance}
                 />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                 <Buy 
                     resultOfRusdBalance={resultOfRusdBalance} 
-                    resultOfEfTokenPrice={resultOfEfTokenPrice}
+                    resultOftsibTokenPrice={resultOftsibTokenPrice}
                     resultOfCheckAllowance={resultOfCheckAllowance}
                  />
                 </CustomTabPanel>

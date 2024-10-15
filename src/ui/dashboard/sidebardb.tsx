@@ -77,7 +77,7 @@ const useStyles = makeStyles({
 
 const navLinks = [
     {
-        name: 'Home',
+        name: 'Dashboard',
         href: '/dashboard',
         iconl: sideiconl_01,
         icond: sideicond_01,

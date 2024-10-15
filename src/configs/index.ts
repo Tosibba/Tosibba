@@ -70,46 +70,46 @@ export const config = createConfig({
   },
 })
 
-type EfContractAddressesType= {
+type TsibContractAddressesType= {
   ramestta: { 
     rusd_Token: Address,
-    ef_token: Address,
-    ef_ico: Address,
-    ef_ico_referral: Address,
-    ef_ico_staking: Address,
-    ef_invest: Address
-    ef_referral: Address
+    tsib_token: Address,
+    tsib_ico: Address,
+    tsib_ico_referral: Address,
+    tsib_ico_staking: Address,
+    tsib_staking: Address
+    tsib_referral: Address
   },
   pingaksha: {
     rusd_Token: Address,
-    ef_token: Address,
-    ef_ico: Address,
-    ef_ico_referral: Address,
-    ef_ico_staking: Address,
-    ef_invest: Address
-    ef_referral: Address
+    tsib_token: Address,
+    tsib_ico: Address,
+    tsib_ico_referral: Address,
+    tsib_ico_staking: Address,
+    tsib_staking: Address
+    tsib_referral: Address
   }
 }
 
-export const efContractAddresses: EfContractAddressesType = {
+export const tsibContractAddresses: TsibContractAddressesType = {
   ramestta: { 
     rusd_Token: "0x2A32e2102467135E22Ca015277E397E9f3B85AF2",
-    ef_token: "0x8828F8F7e11abE2183597cC6029754C25A9BCd57",
-    ef_ico: "0xF14CFCA3D7f35815024197a117eA82d2816Fbc23",
-    ef_ico_referral: "0xe7A53699DE32B1e33492cbf5398744498B3D2ddc",
-    ef_ico_staking: "0xE91A1C7B5689d918D40aAA848CDA96dbAa2aba67",
-    ef_invest: "0xFE684506309fc55524FeDc68679A6c3CF858ee49",
-    ef_referral: "0x6e34282c5ccea7Da90af8d5666d21C4C7DcaBa80"
+    tsib_token: "0x2E215626084a416457Bc4dE6d472431D333883F6",
+    tsib_ico: "0xF14CFCA3D7f35815024197a117eA82d2816Fbc23",
+    tsib_ico_referral: "0xe7A53699DE32B1e33492cbf5398744498B3D2ddc",
+    tsib_ico_staking: "0xE91A1C7B5689d918D40aAA848CDA96dbAa2aba67",
+    tsib_staking: "0xFE684506309fc55524FeDc68679A6c3CF858ee49",
+    tsib_referral: "0x6e34282c5ccea7Da90af8d5666d21C4C7DcaBa80"
 
   },
   pingaksha: {
     rusd_Token: "0x36b594607A788d096ff1091bDAEEE4514dE9BbE6",
-    ef_token: "0x8828F8F7e11abE2183597cC6029754C25A9BCd57",
-    ef_ico: "0xdf9E166Ca9d0a4857EEB535D359013469E56e53F",
-    ef_ico_referral: "0x15Cc8A56770D4B3a5dfCFA42cd036fb8897989b6",
-    ef_ico_staking: "0xb3339c3252b11F4Aa7534f00F8675f150c81e09c",
-    ef_invest: "0xE4AeE7200fFFC75915171EC767C32586720b2625",
-    ef_referral: "0x2618e98dd03e11C867659F918D84B07850DC0c7a"
+    tsib_token: "0x4cb06C8b567071ADDa4B9B938eF6c8C557669Bbb",
+    tsib_ico: "0xdf9E166Ca9d0a4857EEB535D359013469E56e53F",
+    tsib_ico_referral: "0x15Cc8A56770D4B3a5dfCFA42cd036fb8897989b6",
+    tsib_ico_staking: "0xb3339c3252b11F4Aa7534f00F8675f150c81e09c",
+    tsib_staking: "0xc4266e4e2E3a1f5B8769A0Af1EcA63261192D66C",
+    tsib_referral: "0x9743f9Bee015d9ccc63bBA9001d86586D83289ED"
   }
 }
 

@@ -25,18 +25,15 @@ import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect, useState } from "react";
 import { useAccount, useBlockNumber, useBalance, useChainId, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Address, formatEther, parseEther, zeroAddress } from "viem";
-import { efTokenAbi } from "@/configs/abi/efTokenAbi";
-import { efContractAddresses } from "@/configs";
+import { tsibTokenAbi } from "@/configs/abi/tsibTokenAbi";
+import { tsibContractAddresses } from "@/configs";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
-import { efIcoReferralAbi } from "@/configs/abi/efIcoReferral";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 import ContributorsTable from "./contributorsTable";
-import { efIcoAbi } from "@/configs/abi/efIco";
 import ConnectWallet from "../shared/connectWallet";
-import { efIcoStakingAbi } from "@/configs/abi/efIcoStaking";
-import { efInvestAbi } from "@/configs/abi/efInvest";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import shortenString from "@/lib/shortenString";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from '@tanstack/react-query'
@@ -359,92 +356,83 @@ const Dsboard = (props: CircularProgressProps) => {
     const { data: blockNumber } = useBlockNumber({ watch: true, })
 
 
-    const resultOfEfBalance = useReadContract({
-        abi: efTokenAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_token : efContractAddresses.pingaksha.ef_token,
+    const resultOfTsibBalance = useReadContract({
+        abi: tsibTokenAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
         functionName: 'balanceOf',
         args: [address as Address],
         account: address
-    })
-
-    const resultOfRusdBalance = useReadContract({
-        abi: efTokenAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
-        functionName: 'balanceOf',
-        args: [address as Address],
-        account: address
-    })
-
-    const resultOfUserTeamReward = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'user2TeamRewardInfo',
-        args: [address as Address],
-        account: zeroAddress
-    })
-
-    const resultOfUserBountyReward = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'user2BountyRewardInfo',
-        args: [address as Address],
-        account: zeroAddress
     })
 
     const resultOfReferralDetail = useReadContracts({
         contracts: [
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'getReferralRewards',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getReferralInfo',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferralsCount',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'isValidReferrerOrInvestor',
-                args: [address as Address, referrerAddress as Address]
-            },
-            {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferrer',
                 args: [address as Address]
             },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getSelfBusiness',
+                args: [address as Address]
+            },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getBusinessInfo',
+                args: [address as Address]
+            },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'isValidReferrer',
+                args: [address as Address, referrerAddress as Address]
+            },
+
         ]
     })
 
-    const resultOfEfTokenPrice = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'getTokenPrice',
-        args: [],
-        account: zeroAddress
-    })
+    // const resultOftsibTokenPrice = useReadContract({
+    //     abi: tsibStakingAbi,
+    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+    //     functionName: 'getTokenPrice',
+    //     args: [],
+    //     account: zeroAddress
+    // })
 
 
     const Box__list = [
         {
             image: l1,
             title: 'Your Wallet Balance',
-            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfEfBalance?.data ? resultOfEfBalance.data.toString() : 0)), 3)} TSIB`,
-            valueInUsd: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfEfBalance?.data ? resultOfEfBalance.data.toString() : 0))) * 0.5, 3)}`
+            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance.data.toString() : 0)), 3)} TSIB`,
+            valueInUsd: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance.data.toString() : 0))) * 0.017, 3)}`
         },
         {
             image: l2,
             title: 'Self Staking Income',
-            data: `$0.00000`,
+            data: `0.0000 TSIB`,
+            valueInUsd: `$0.00000`,
         },
         {
             image: l3,
-            title: 'Your Team Income',
-            data: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.toString() : 0)), 5)}`
+            title: 'Your Spot Income',
+            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0)), 4)} TSIB`,
+            valueInUsd: `$0.00000`
         },
         // {
         //     image: l2,
@@ -467,11 +455,9 @@ const Dsboard = (props: CircularProgressProps) => {
     // use to refetch
     useEffect(() => {
         // queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
-        queryClient.invalidateQueries({ queryKey: resultOfEfBalance.queryKey })
-        queryClient.invalidateQueries({ queryKey: resultOfUserTeamReward.queryKey })
-        queryClient.invalidateQueries({ queryKey: resultOfUserBountyReward.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfTsibBalance.queryKey })
         queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    }, [blockNumber, queryClient,resultOfEfBalance,resultOfUserTeamReward,resultOfUserBountyReward,resultOfReferralDetail])
+    }, [blockNumber, queryClient,resultOfTsibBalance,resultOfReferralDetail])
 
 
     
@@ -484,7 +470,7 @@ const Dsboard = (props: CircularProgressProps) => {
                     <Box className={classes.step__one_box}>
                         <Box><Image src={dleft} alt={""} /></Box>
                         <Box className={classes.Top_hding}>
-                            <Heading heading={"Welcome to Tosibba"} />
+                            <Heading heading={"Welcome to Tosibba Dashboard"} />
                         </Box>
                         <Box><Image src={dright} alt={""} /></Box>
                     </Box>
@@ -508,23 +494,11 @@ const Dsboard = (props: CircularProgressProps) => {
                 </Box>
 
                  
-                    <HomeTab 
-                  resultOfReferralDetail={resultOfReferralDetail}
-                  resultOfRusdBalance={resultOfRusdBalance} 
-                  resultOfEfTokenPrice={resultOfEfTokenPrice}
-                //   resultOfCheckAllowance={resultOfCheckAllowance}
+                    <HomeTab
+                    resultOfTsibBalance={resultOfTsibBalance}
                   />
                      <Box mt={4}/>
                     <Refer resultOfReferralDetail={resultOfReferralDetail} />
-                    
-              
-
-
-
-                
-
-
-               
 
             </Box>
 

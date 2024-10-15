@@ -26,18 +26,16 @@ import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect, useState } from "react";
 import { useAccount, useBlockNumber, useBalance, useChainId, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Address, formatEther, parseEther, zeroAddress } from "viem";
-import { efTokenAbi } from "@/configs/abi/efTokenAbi";
-import { efContractAddresses } from "@/configs";
+import { tsibTokenAbi } from "@/configs/abi/tsibTokenAbi";
+import { tsibContractAddresses } from "@/configs";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
-import { efIcoReferralAbi } from "@/configs/abi/efIcoReferral";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 import ContributorsTable from "./contributorsTable";
-import { efIcoAbi } from "@/configs/abi/efIco";
+import { tsibIcoAbi } from "@/configs/abi/tsibIco";
 import ConnectWallet from "../shared/connectWallet";
-import { efIcoStakingAbi } from "@/configs/abi/efIcoStaking";
-import { efInvestAbi } from "@/configs/abi/efInvest";
 import shortenString from "@/lib/shortenString";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from '@tanstack/react-query'
@@ -342,7 +340,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 
-const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:any) => {
+const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}:any) => {
     const classes = useStyles();
     const [valueTop, setValueTop] = useState<number>(1);
     const searchParams = useSearchParams()
@@ -385,8 +383,8 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
     // }
 
     const resultOfSaleDetails = useReadContract({
-        abi: efIcoAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+        abi: tsibIcoAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
         functionName: 'saleType2IcoDetail',
         args: [0],
         account: zeroAddress
@@ -418,24 +416,24 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
 
 
     const resultOfUserContribution = useReadContract({
-        abi: efIcoAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+        abi: tsibIcoAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
         functionName: 'user2SaleType2Contributor',
         args: [address as Address, 0],
         account: zeroAddress
     })
 
     const resultOfRamaPriceInUSD = useReadContract({
-        abi: efIcoAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+        abi: tsibIcoAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
         functionName: 'ramaPriceInUSD',
         args: [],
         account: zeroAddress
     })
 
     const resultOfBalance = useReadContract({
-        abi: efTokenAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_token : efContractAddresses.pingaksha.ef_token,
+        abi: tsibTokenAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
         functionName: 'balanceOf',
         args: [address as Address],
         account: address
@@ -445,26 +443,26 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
     const resultOfReferralDetail = useReadContracts({
         contracts: [
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'getReferralRewards',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getReferralInfo',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferralsCount',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'isValidReferrerOrInvestor',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'isValidReferrer',
                 args: [address as Address, referrerAddress as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferrer',
                 args: [address as Address]
             },
@@ -590,7 +588,7 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
                                 <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
-                                            formatEther?.(BigInt?.(resultOfEfTokenPrice?.data ? resultOfEfTokenPrice?.data?.toString() : 0))
+                                            formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
                                     ).toFixed(2)
                                     }</Typography> */}
                                     {/* <Typography fontWeight={500} color={'#fff'}>Pre-Sale: $0.1</Typography> */}
@@ -709,8 +707,8 @@ const Buy = ({resultOfRusdBalance,resultOfEfTokenPrice,resultOfCheckAllowance}:a
                                     //     }}
                                     //     onClick={async () => {
                                     //         await writeContractAsync({
-                                    //             abi: efIcoAbi,
-                                    //             address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+                                    //             abi: tsibIcoAbi,
+                                    //             address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
                                     //             functionName: 'buy',
                                     //             args: [0, (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address)],
                                     //             account: address,

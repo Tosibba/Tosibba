@@ -7,8 +7,8 @@ import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 import shortenString from "@/lib/shortenString";
 import { useAccount, useBlockNumber, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Address, formatEther, zeroAddress } from "viem";
-import { efInvestAbi } from "@/configs/abi/efInvest";
-import { formatTier, efContractAddresses } from "@/configs";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
+import { formatTier, tsibContractAddresses } from "@/configs";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 import HoverTool from "@/theme/components/hoverTool";
 import AddressCopy from "@/theme/components/addressCopy";
@@ -65,7 +65,7 @@ const useStyles = makeStyles({
     }
 });
 
-const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserInvestList: any, mintRatePerYear: Number }) => {
+const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserStakerList: any, mintRatePerYear: Number }) => {
     const classes = useStyles();
 
     const { address } = useAccount()
@@ -169,9 +169,9 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
 
     const Reward = ({ index }: { index: number }) => {
         const mintReward = useReadContract({
-            abi: efInvestAbi,
-            address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-            functionName: 'calculateMintRewards',
+            abi: tsibStakingAbi,
+            address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+            functionName: 'calculateRewards',
             args: [address as Address, BigInt(index)],
             account: zeroAddress
         })
@@ -196,7 +196,7 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
         return (
 
             <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                <Typography color={'#fff'}>${Number(mintReward?.data) > 0 ? Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))).toFixed(5) : '0.00000'} 
+                <Typography color={'#fff'}>{Number(mintReward?.data) > 0 ? Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))).toFixed(5) : '0.00000'} TSIB
                     <Button
                         disabled={
                             (isPendingClaimForWrite || isLoading)
@@ -210,20 +210,20 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
                         }}
                         onClick={async () => {
                             await writeContractAsync({
-                                abi: efInvestAbi,
-                                address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-                                functionName: 'claimMintRewards',
+                                abi: tsibStakingAbi,
+                                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+                                functionName: 'withdraw',
                                 args: [BigInt(index)],
                                 account: address
                             })
                         }}
-                    >Claim
+                    >Withdraw
                         {
                             (isPendingClaimForWrite || isLoading) && <CircularProgress sx={{ ml: "7px" }} size={18} color="inherit" />
                         }
                     </Button>
                 </Typography>
-                {/* <Typography color={'#999'}>${Number(mintReward?.data) > 0 ? (Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))) * 0.05).toFixed(5) : '0.00000'}</Typography> */}
+                <Typography color={'#999'}>${Number(mintReward?.data) > 0 ? (Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))) * 0.05).toFixed(5) : '0.00000'}</Typography>
             </TableCell>
         )
     }
@@ -259,8 +259,8 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
     //                 }}
     //                 onClick={async () => {
     //                     await writeContractAsync({
-    //                         abi: efInvestAbi,
-    //                         address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
+    //                         abi: tsibStakingAbi,
+    //                         address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
     //                         functionName: 'unstake',
     //                         args: [BigInt(index)],
     //                         account: address
@@ -276,6 +276,29 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
     //     )
     // }
 
+    const Package = (id: any) => {
+        // const resultOfUserPackage = useReadContract({
+        //     abi: tsibStakingAbi,
+        //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        //     functionName: 'getPackage',
+        //     args: [BigInt(id)],
+        //     account: zeroAddress
+        // })
+        return (
+            <>
+                <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
+                    {/* <Typography color={'#fff'}>{formatTier(Number(resultOfUserPackage?.data?.dailyReturnInPercent))}</Typography> */}
+                    <Typography color={'#fff'}>{'0.33%'}</Typography>
+                </TableCell>
+
+                <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
+                    {/* <Typography color={'#fff'}>{formatTier(Number(Number(resultOfUserPackage?.data?.withdrawnPeriod) / 86400))}</Typography> */}
+                    <Typography color={'#fff'}>{'Monthly'}</Typography>
+                </TableCell>
+            </>
+        )
+    }
+
 
 
 
@@ -286,8 +309,9 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
                     <TableHead sx={{ backgroundColor: '#311250' }}>
                         <TableRow>
                             <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }}>User</TableCell>
-                            <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">IA <HoverTool Title={"Invested Amount"} /></TableCell>
-                            {/* <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">Tier</TableCell> */}
+                            <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">SA <HoverTool Title={"Stake Amount"} /></TableCell>
+                            <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">DR<HoverTool Title={"Daily Rate"} /></TableCell>
+                            <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">WP<HoverTool Title={"Windrawn Period"} /></TableCell>
                             <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">Reward</TableCell>
                             <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">TRI365D <HoverTool Title={"Total Reward in 365 Days"} /></TableCell>
                             <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 16, color: '#fff' }} align="left">TCR <HoverTool Title={"Till Claimed Rewards"} /></TableCell>
@@ -301,7 +325,7 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
                     <TableBody style={{ alignItems: 'center' }}>
 
                         {
-                            resultOfUserInvestList?.length > 0 ? resultOfUserInvestList.map((item: any, index: number) => (
+                            resultOfUserStakerList?.length > 0 ? resultOfUserStakerList.map((item: any, index: number) => (
                                 <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} component="th" scope="row">
                                         <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -318,19 +342,17 @@ const TableEarn = ({ resultOfUserInvestList, mintRatePerYear }: { resultOfUserIn
                                         </Box>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                                        <Typography color={'#fff'}>${convertToAbbreviated(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0)), 3)} </Typography>
-                                        {/* <Typography color={'#999'}>{formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) * 0.05, 3)}</Typography> */}
+                                        <Typography color={'#fff'}>{convertToAbbreviated(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0)), 3)} TSIB</Typography>
+                                        <Typography color={'#999'}>{formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) * 0.05, 3)}</Typography>
                                     </TableCell>
-                                    {/* <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                                    <Typography color={'#fff'}>{formatTier(Number(item.tier))}</Typography>
 
-                                </TableCell> */}
+                                    <Package id={item?.packageId} />
 
                                     <Reward index={index} />
 
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                                        <Typography color={'#fff'}>${convertToAbbreviated((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100), 5)} </Typography>
-                                        {/* <Typography color={'#999'}>{formatNumberToCurrencyString((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) * 0.05, 5)}</Typography> */}
+                                        <Typography color={'#fff'}>{convertToAbbreviated((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100), 5)} TSIB</Typography>
+                                        <Typography color={'#999'}>{formatNumberToCurrencyString((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) * 0.05, 5)}</Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                         <Typography color={'#fff'}>${convertToAbbreviated(formatEther?.(BigInt?.(item?.claimedMintRewards ? item.claimedMintRewards.toString() : 0)), 5)} </Typography>

@@ -3,7 +3,7 @@
 // import { makeStyles } from '@mui/styles';
 // import Image from "next/image";
 // import { useChainId, useReadContract } from "wagmi";
-// import { efContractAddresses } from "@/configs";
+// import { tsibContractAddresses } from "@/configs";
 // import { parseEther, zeroAddress } from "viem";
 // import { efStakingAbi } from "@/configs/abi/efStaking";
 
@@ -38,7 +38,7 @@
 //     const chainId = useChainId()
 //     const {data:mintRatePerHour} = useReadContract({
 //         abi: efStakingAbi,
-//         address: chainId === 1370 ? efContractAddresses.ramestta.ef_staking : efContractAddresses.pingaksha.ef_staking,
+//         address: chainId === 1370 ? tsibContractAddresses.ramestta.ef_staking : tsibContractAddresses.pingaksha.ef_staking,
 //         functionName: 'calculateMintRate',
 //         args: [parseEther(inputInUsd),BigInt(member)],
 //         account: zeroAddress,

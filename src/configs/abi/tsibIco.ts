@@ -1,4 +1,4 @@
-export const efIcoAbi = [
+export const tsibIcoAbi = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -195,7 +195,7 @@ export const efIcoAbi = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "efToken_",
+				"name": "tsibToken_",
 				"type": "address"
 			},
 			{
@@ -242,7 +242,7 @@ export const efIcoAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "efToken",
+		"name": "tsibToken",
 		"outputs": [
 			{
 				"internalType": "contract IERC20",
@@ -448,7 +448,7 @@ export const efIcoAbi = [
 				"type": "uint256"
 			}
 		],
-		"name": "transferEFTokens",
+		"name": "transfertsibTokens",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

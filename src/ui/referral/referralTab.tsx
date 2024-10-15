@@ -12,13 +12,13 @@ import Referral from './referral';
 import Tablereferral from './tablereferral';
 import Refer from '../dashboard/refer';
 import { useAccount, useBlockNumber, useChainId, useReadContracts } from 'wagmi';
-import { efReferralAbi } from '@/configs/abi/efReferral';
-import { efContractAddresses } from '@/configs';
+import { tsibReferralAbi } from '@/configs/abi/tsibReferral';
+import { tsibContractAddresses } from '@/configs';
 import { Address } from 'viem';
-import Tablereferral2 from './tablereferral2';
+// import Tablereferral2 from './tablereferral2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from "react";
-import Tablereferraldownline from './tablereferraldownline';
+// import Tablereferraldownline from './tablereferraldownline';
 
 
 interface TabPanelProps {
@@ -97,15 +97,33 @@ export default function ReferralTab() {
     const resultOfReferralDetail = useReadContracts({
         contracts: [
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'getReferralRewards',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getReferralInfo',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferralsCount',
+                args: [address as Address]
+            },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getReferrer',
+                args: [address as Address]
+            },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getSelfBusiness',
+                args: [address as Address]
+            },
+            {
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getBusinessInfo',
                 args: [address as Address]
             },
         ]
@@ -143,8 +161,8 @@ export default function ReferralTab() {
                             }
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab sx={{ textTransform: 'capitalize', color: "#999",border:'1px solid #595c61',borderRadius:'8px',margin:'0px 0px 0px 0px', flex: 1,'@media(max-width : 600px)':{flex: 'none',} }} label="Direct Referral" {...a11yProps(0)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999",border:'1px solid #595c61',borderRadius:'8px',margin:'0px 0px 0px 10px', flex: 1,'@media(max-width : 600px)':{flex: 'none',} }} label="Left" {...a11yProps(1)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999",border:'1px solid #595c61',borderRadius:'8px',margin:'0px 0px 0px 10px', flex: 1,'@media(max-width : 600px)':{flex: 'none',} }} label="Right" {...a11yProps(2)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999",border:'1px solid #595c61',borderRadius:'8px',margin:'0px 0px 0px 10px', flex: 1,'@media(max-width : 600px)':{flex: 'none',} }} label="Upline Referral" {...a11yProps(1)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999",border:'1px solid #595c61',borderRadius:'8px',margin:'0px 0px 0px 10px', flex: 1,'@media(max-width : 600px)':{flex: 'none',} }} label="Tree View" {...a11yProps(2)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
@@ -157,23 +175,23 @@ export default function ReferralTab() {
 
                     </Box>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
+                {/* <CustomTabPanel value={value} index={1}>
                     <Box className={classes.boxref} mt={2}>
-                        <Referral refTitle={'Left Referral'} />
+                        <Referral refTitle={'Upline Referral'} />
                         <Box sx={{ marginTop: '1rem' }}>
                             <Tablereferral2 />
                         </Box>
                     </Box>
-                </CustomTabPanel>
+                </CustomTabPanel> */}
 
-                <CustomTabPanel value={value} index={2}>
+                {/* <CustomTabPanel value={value} index={2}>
                     <Box className={classes.boxref} mt={2}>
-                        <Referral refTitle={'Right Referral'} />
+                        <Referral refTitle={'Tree View'} />
                         <Box sx={{ marginTop: '1rem' }}>
                             <Tablereferraldownline />
                         </Box>
                     </Box>
-                </CustomTabPanel>
+                </CustomTabPanel> */}
 
             </Box>
         </Box>

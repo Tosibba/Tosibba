@@ -1,14 +1,9 @@
-export const tsibIcoStakingAbi= [
+export const tsibStakingAbi= [
 	{
 		"inputs": [
 			{
 				"internalType": "address",
 				"name": "tsibToken_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "icoContract_",
 				"type": "address"
 			},
 			{
@@ -31,6 +26,11 @@ export const tsibIcoStakingAbi= [
 		"type": "error"
 	},
 	{
+		"inputs": [],
+		"name": "InvalidPackageId",
+		"type": "error"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -48,12 +48,23 @@ export const tsibIcoStakingAbi= [
 	},
 	{
 		"inputs": [],
-		"name": "LockPeriodNotOver",
+		"name": "MaxReturnAchieve",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "MinStakeAmount",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "NoTokensStaked",
+		"name": "NoTokensStake",
 		"type": "error"
 	},
 	{
@@ -80,6 +91,11 @@ export const tsibIcoStakingAbi= [
 	},
 	{
 		"inputs": [],
+		"name": "TokensUnstakeByAdmin",
+		"type": "error"
+	},
+	{
+		"inputs": [],
 		"name": "TokensUnstaked",
 		"type": "error"
 	},
@@ -89,42 +105,9 @@ export const tsibIcoStakingAbi= [
 		"type": "error"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "reward",
-				"type": "uint256"
-			}
-		],
-		"name": "CommunityRewards",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "reward",
-				"type": "uint256"
-			}
-		],
-		"name": "MintRewardsClaimed",
-		"type": "event"
+		"inputs": [],
+		"name": "WithdrawalPeriodNotReached",
+		"type": "error"
 	},
 	{
 		"anonymous": false,
@@ -151,29 +134,17 @@ export const tsibIcoStakingAbi= [
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "staker",
+				"name": "user",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "enum IStakeEF.Tier",
-				"name": "tier",
-				"type": "uint8"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "volumeInUSD",
+				"name": "reward",
 				"type": "uint256"
 			}
 		],
-		"name": "Staked",
+		"name": "RewardsClaimed",
 		"type": "event"
 	},
 	{
@@ -192,25 +163,70 @@ export const tsibIcoStakingAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "Unstaked",
+		"name": "Staked",
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "BASE_MINT_RATE",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "UnstakedByAdmin",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "activate_",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dailyReturnInPercent_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "returnInPercent_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "duration_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "withdrawnPeriod_",
+				"type": "uint256"
+			}
+		],
+		"name": "AddPackage",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "LOCK_PERIOD",
+		"name": "MIN_STAKE_AMOUNT",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -225,29 +241,77 @@ export const tsibIcoStakingAbi= [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "volumeInUSD_",
+				"name": "packageId_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "activate_",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dailyReturnInPercent_",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "referralCount_",
+				"name": "returnInPercent_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "duration_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "withdrawnPeriod_",
 				"type": "uint256"
 			}
 		],
-		"name": "calculateMintRate",
+		"name": "UpdatePackage",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_packages",
 		"outputs": [
 			{
+				"internalType": "bool",
+				"name": "activate",
+				"type": "bool"
+			},
+			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "dailyReturnInPercent",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "returnInPercent",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "withdrawnPeriod",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "pure",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -263,7 +327,7 @@ export const tsibIcoStakingAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "calculateMintRewards",
+		"name": "calculateRewards",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -275,39 +339,24 @@ export const tsibIcoStakingAbi= [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "claimCommunityRewards",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user_",
+				"type": "address"
+			},
 			{
 				"internalType": "uint256",
 				"name": "index_",
 				"type": "uint256"
 			}
 		],
-		"name": "claimRewards",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "referralCount_",
-				"type": "uint256"
-			}
-		],
-		"name": "getPositionAndBoostRateInPercent",
+		"name": "checkMaxReturn",
 		"outputs": [
 			{
-				"internalType": "enum IStakeEF.Position",
+				"internalType": "bool",
 				"name": "",
-				"type": "uint8"
+				"type": "bool"
 			},
 			{
 				"internalType": "uint256",
@@ -315,7 +364,104 @@ export const tsibIcoStakingAbi= [
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "pure",
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "packageId_",
+				"type": "uint256"
+			}
+		],
+		"name": "getPackage",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "bool",
+						"name": "activate",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dailyReturnInPercent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "returnInPercent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "withdrawnPeriod",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ITosibbaStaking.Package",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "startIndex_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endIndex_",
+				"type": "uint256"
+			}
+		],
+		"name": "getPackages",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "bool",
+						"name": "activate",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dailyReturnInPercent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "returnInPercent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "withdrawnPeriod",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ITosibbaStaking.Package[]",
+				"name": "result",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -343,56 +489,6 @@ export const tsibIcoStakingAbi= [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "volumeInUSD_",
-				"type": "uint256"
-			}
-		],
-		"name": "getTierAndBoostRateInPercent",
-		"outputs": [
-			{
-				"internalType": "enum IStakeEF.Tier",
-				"name": "",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "icoContract",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "tsibToken",
-		"outputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -410,7 +506,7 @@ export const tsibIcoStakingAbi= [
 		"name": "referralContract",
 		"outputs": [
 			{
-				"internalType": "contract IReferralEF",
+				"internalType": "contract ITosibbaReferral",
 				"name": "",
 				"type": "address"
 			}
@@ -428,19 +524,24 @@ export const tsibIcoStakingAbi= [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
 				"name": "amount_",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "volumeInUSD_",
+				"name": "packageId_",
 				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "referrer_",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isJoinRightSide_",
+				"type": "bool"
 			}
 		],
 		"name": "stake",
@@ -449,14 +550,8 @@ export const tsibIcoStakingAbi= [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			}
-		],
-		"name": "totalCommunityRewardLengthForUser",
+		"inputs": [],
+		"name": "totalPackageLenth",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -469,20 +564,7 @@ export const tsibIcoStakingAbi= [
 	},
 	{
 		"inputs": [],
-		"name": "totalCommunityRewards",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalMintRewards",
+		"name": "totalRewards",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -542,24 +624,6 @@ export const tsibIcoStakingAbi= [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "to_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount_",
-				"type": "uint256"
-			}
-		],
-		"name": "transfertsibTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
 			}
@@ -571,6 +635,42 @@ export const tsibIcoStakingAbi= [
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "transferTSIB",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "tsibToken",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account_",
+				"type": "address"
+			},
 			{
 				"internalType": "uint256",
 				"name": "index_",
@@ -590,30 +690,10 @@ export const tsibIcoStakingAbi= [
 				"type": "address"
 			}
 		],
-		"name": "user2CommunityRewardInfo",
+		"name": "user2Staker",
 		"outputs": [
 			{
 				"components": [
-					{
-						"internalType": "address",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "level",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fromClaimedReward",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fromClaimedTime",
-						"type": "uint256"
-					},
 					{
 						"internalType": "uint256",
 						"name": "amount",
@@ -621,11 +701,31 @@ export const tsibIcoStakingAbi= [
 					},
 					{
 						"internalType": "uint256",
-						"name": "claimedReward",
+						"name": "claimedRewards",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastClaimTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "packageId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isUnstaked",
+						"type": "bool"
 					}
 				],
-				"internalType": "struct IStakeEF.CommunityReward",
+				"internalType": "struct ITosibbaStaking.Stake",
 				"name": "",
 				"type": "tuple"
 			}
@@ -651,58 +751,7 @@ export const tsibIcoStakingAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "user2CommunityRewardInfoList",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "level",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fromClaimedReward",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fromClaimedTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "claimedReward",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct IStakeEF.CommunityReward[]",
-				"name": "result",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			}
-		],
-		"name": "user2Staked",
+		"name": "user2StakerList",
 		"outputs": [
 			{
 				"components": [
@@ -713,7 +762,7 @@ export const tsibIcoStakingAbi= [
 					},
 					{
 						"internalType": "uint256",
-						"name": "claimedMintRewards",
+						"name": "claimedRewards",
 						"type": "uint256"
 					},
 					{
@@ -728,12 +777,7 @@ export const tsibIcoStakingAbi= [
 					},
 					{
 						"internalType": "uint256",
-						"name": "endTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "volumeInUSD",
+						"name": "packageId",
 						"type": "uint256"
 					},
 					{
@@ -742,9 +786,9 @@ export const tsibIcoStakingAbi= [
 						"type": "bool"
 					}
 				],
-				"internalType": "struct IStakeEF.Stake",
-				"name": "",
-				"type": "tuple"
+				"internalType": "struct ITosibbaStaking.Stake[]",
+				"name": "result",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -753,67 +797,14 @@ export const tsibIcoStakingAbi= [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
-				"name": "startIndex_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "endIndex_",
+				"name": "index_",
 				"type": "uint256"
 			}
 		],
-		"name": "user2StakedList",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "claimedMintRewards",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "startTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "lastClaimTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "endTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "volumeInUSD",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isUnstaked",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct IStakeEF.Stake[]",
-				"name": "result",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ] as const

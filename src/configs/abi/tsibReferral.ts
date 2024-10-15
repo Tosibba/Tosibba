@@ -1,4 +1,73 @@
-export const efReferralAbi= [
+export const tsibReferralAbi= [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "referrer_",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isJoinRightSide_",
+				"type": "bool"
+			}
+		],
+		"name": "addReferral",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "referrer_",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isJoinRightSide_",
+				"type": "bool"
+			}
+		],
+		"name": "addReferralForUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tsibToken_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "stakingContract_",
+				"type": "address"
+			}
+		],
+		"name": "initialize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -8,6 +77,24 @@ export const efReferralAbi= [
 		"inputs": [],
 		"name": "AlreadyInitialize",
 		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "staker_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "distributeRewards",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -66,6 +153,13 @@ export const efReferralAbi= [
 		"inputs": [],
 		"name": "ReferralAlreadyExists",
 		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -151,16 +245,11 @@ export const efReferralAbi= [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "referrer_",
+				"name": "newOwner",
 				"type": "address"
 			}
 		],
-		"name": "addReferral",
+		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -169,25 +258,7 @@ export const efReferralAbi= [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "referrer_",
-				"type": "address"
-			}
-		],
-		"name": "addReferralForUser",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "investor_",
+				"name": "to_",
 				"type": "address"
 			},
 			{
@@ -196,19 +267,25 @@ export const efReferralAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "distributeRewards",
+		"name": "transferTSIB",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "efToken",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "referrer_",
+				"type": "address"
+			}
+		],
+		"name": "getBusinessInfo",
 		"outputs": [
 			{
-				"internalType": "contract IMintableERC20",
+				"internalType": "string",
 				"name": "",
-				"type": "address"
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -235,42 +312,25 @@ export const efReferralAbi= [
 		"name": "getDirectReferrals",
 		"outputs": [
 			{
-				"internalType": "address[]",
+				"components": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "side",
+						"type": "string"
+					}
+				],
+				"internalType": "struct ITosibbaReferral.User[]",
 				"name": "users",
-				"type": "address[]"
+				"type": "tuple[]"
 			},
 			{
 				"internalType": "uint256[]",
 				"name": "amounts",
-				"type": "uint256[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user_",
-				"type": "address"
-			}
-		],
-		"name": "getReferralDownlineTreeWeakerLeg",
-		"outputs": [
-			{
-				"internalType": "address[]",
-				"name": "referrerTree",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "amounts",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "rewards",
 				"type": "uint256[]"
 			}
 		],
@@ -285,41 +345,56 @@ export const efReferralAbi= [
 				"type": "address"
 			}
 		],
-		"name": "getReferralRewards",
+		"name": "getReferralInfo",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"components": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "user",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "side",
+								"type": "string"
+							}
+						],
+						"internalType": "struct ITosibbaReferral.User[]",
+						"name": "users",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewards",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leftBusiness",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rightBusiness",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "joinedAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "registered",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct ITosibbaReferral.Referral",
 				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getReferralUplineTree",
-		"outputs": [
-			{
-				"internalType": "address[]",
-				"name": "referrerTree",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "amounts",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "rewards",
-				"type": "uint256[]"
+				"type": "tuple"
 			}
 		],
 		"stateMutability": "view",
@@ -350,6 +425,79 @@ export const efReferralAbi= [
 				"internalType": "address",
 				"name": "user",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "levelDepth",
+				"type": "uint256"
+			}
+		],
+		"name": "getReferralUplineTree",
+		"outputs": [
+			{
+				"components": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "user",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "side",
+								"type": "string"
+							}
+						],
+						"internalType": "struct ITosibbaReferral.User[]",
+						"name": "users",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewards",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leftBusiness",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rightBusiness",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "joinedAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "registered",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct ITosibbaReferral.Referral[]",
+				"name": "referrerTree",
+				"type": "tuple[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			}
 		],
 		"name": "getReferrer",
@@ -367,33 +515,21 @@ export const efReferralAbi= [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "rusdToken_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "efToken_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "investingContract_",
+				"name": "referrer_",
 				"type": "address"
 			}
 		],
-		"name": "initialize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "investorContract",
+		"name": "getSelfBusiness",
 		"outputs": [
 			{
-				"internalType": "contract IEncryptFundInvest",
+				"internalType": "uint256",
 				"name": "",
-				"type": "address"
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -425,7 +561,7 @@ export const efReferralAbi= [
 				"type": "address"
 			}
 		],
-		"name": "isValidReferrerOrInvestor",
+		"name": "isValidReferrer",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -451,17 +587,10 @@ export const efReferralAbi= [
 	},
 	{
 		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "rusdToken",
+		"name": "stakerContract",
 		"outputs": [
 			{
-				"internalType": "contract IERC20",
+				"internalType": "contract ITosibbaStaking",
 				"name": "",
 				"type": "address"
 			}
@@ -483,39 +612,16 @@ export const efReferralAbi= [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
+		"inputs": [],
+		"name": "tsibToken",
+		"outputs": [
 			{
 				"internalType": "contract IERC20",
-				"name": "token_",
+				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount_",
-				"type": "uint256"
 			}
 		],
-		"name": "transferTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ] as const

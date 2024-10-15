@@ -2,8 +2,8 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import t1 from '../../icons/r2.svg'
 import { makeStyles } from '@mui/styles';
 import Image from "next/image";
-import { efIcoAbi } from "@/configs/abi/efIco";
-import { efContractAddresses } from "@/configs";
+import { tsibIcoAbi } from "@/configs/abi/tsibIco";
+import { tsibContractAddresses } from "@/configs";
 import { Address, formatEther, zeroAddress } from "viem";
 import { useAccount, useBlockNumber, useChainId, useReadContract } from "wagmi";
 import shortenString from "@/lib/shortenString";
@@ -124,8 +124,8 @@ const ContributorsTable = ({ resultOfRamaPriceInUSD }: { resultOfRamaPriceInUSD:
     const { data: blockNumber } = useBlockNumber({ watch: true, })
 
     const resultOfUserContributorLength = useReadContract({
-        abi: efIcoAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+        abi: tsibIcoAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
         functionName: 'totalContributorLengthForUser',
         args: [address as Address, 0],
         account: zeroAddress
@@ -133,8 +133,8 @@ const ContributorsTable = ({ resultOfRamaPriceInUSD }: { resultOfRamaPriceInUSD:
 
 
     const resultOfUserContributorList = useReadContract({
-        abi: efIcoAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_ico : efContractAddresses.pingaksha.ef_ico,
+        abi: tsibIcoAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
         functionName: 'user2SaleType2ContributorList',
         args: [address as Address, 0, BigInt(0), Number(resultOfUserContributorLength?.data) > 0 ? resultOfUserContributorLength.data as bigint : BigInt(0)],
         account: zeroAddress

@@ -11,9 +11,9 @@ import HoverTool from "@/theme/components/hoverTool";
 import { makeStyles } from '@mui/styles';
 import { useAccount, useChainId, useReadContract } from "wagmi";
 // import { efStakingAbi } from "@/configs/abi/efStaking";
-import { efContractAddresses } from "@/configs";
+import { tsibContractAddresses } from "@/configs";
 import { Address, formatEther, zeroAddress } from "viem";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import shortenString from "@/lib/shortenString";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
@@ -111,13 +111,14 @@ const Tablereferral = ({ referralsCount }: { referralsCount: string }) => {
 
 
     const resultOfDirectReferrals = useReadContract({
-        abi: efReferralAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+        abi: tsibReferralAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
         functionName: 'getDirectReferrals',
         args: [address as Address, BigInt(0), Number(referralsCount as string) > 0 ? BigInt(referralsCount as string) : BigInt(0)],
         account: zeroAddress
     })
 
+console.log(resultOfDirectReferrals?.data?.[0]?.[0]?.user);
 
 
     return (
@@ -129,7 +130,8 @@ const Tablereferral = ({ referralsCount }: { referralsCount: string }) => {
                         <TableHead sx={{ backgroundColor: '#311250' }}>
                             <TableRow>
                                 <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} >User</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} align="left">IA <HoverTool Title={"Invest Amount"} /></TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} align="left">SA<HoverTool Title={"Stake Amount"} /></TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} align="left">Joined</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} align="left">Bonus</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #595c61', fontSize: 18, color: '#fff', padding: 1 }} align="right">YE <HoverTool Title={"Your Earning"} /></TableCell>
 
@@ -153,51 +155,52 @@ const Tablereferral = ({ referralsCount }: { referralsCount: string }) => {
                                                 <AddressCopy 
                                              textColor="#00ffff !important" 
                                              hrefLink={
-                                                chainId===1370?`https://ramascan.com/address/${resultOfDirectReferrals.data[0][index]}`:
-                                                `https://pingaksha.ramascan.com/address/${resultOfDirectReferrals.data[0][index]}`
+                                                chainId===1370?`https://ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}`:
+                                                `https://pingaksha.ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}`
                                              } 
-                                             text={resultOfDirectReferrals.data[0][index] as string} 
-                                             addresstext={shortenString(resultOfDirectReferrals.data[0][index] as Address)}/>
+                                             text={resultOfDirectReferrals.data[0][index].user as string} 
+                                             addresstext={shortenString(resultOfDirectReferrals.data[0][index].user as Address)}/>
                                             </Box>
                                         </TableCell>
                                         <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                             <Typography color={'#fff'}>{resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        ${convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))),5)} 
+                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))),3)}  TSIB
                                                     </>
                                                 )
                                                 : '-'}
                                             </Typography>
-                                            {/* <Typography color={'#999'}>
+                                            <Typography color={'#999'}>
                                             {resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString())))*0.05,5)}
+                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString())))*0.05,3)}
                                                     </>
                                                 )
                                                 : '-'}
-                                            </Typography> */}
+                                            </Typography>
                                         </TableCell>
-                                        <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">5%</TableCell>
+                                        <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">{resultOfDirectReferrals.data[0][index].side}</TableCell>
+                                        <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">10%</TableCell>
                                         <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="right">
                                             <Typography color={'#fff'}>{resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        ${convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.05,5)} 
+                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1,3)}  TSIB
                                                     </>
                                                 )
                                                 : '-'}
                                             </Typography>
-                                            {/* <Typography color={'#999'}>
+                                            <Typography color={'#999'}>
                                             {resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.05 * 0.05,5)}
+                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1 * 0.05,3)}
                                                     </>
                                                 )
                                                 : '-'}
-                                            </Typography> */}
+                                            </Typography>
                                         </TableCell>
 
 

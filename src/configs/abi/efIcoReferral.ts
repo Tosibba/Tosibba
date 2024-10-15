@@ -1,4 +1,4 @@
-export const efIcoReferralAbi=[
+export const tsibIcoReferralAbi=[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -338,7 +338,7 @@ export const efIcoReferralAbi=[
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "efToken_",
+				"name": "tsibToken_",
 				"type": "address"
 			},
 			{
@@ -396,7 +396,7 @@ export const efIcoReferralAbi=[
 	},
 	{
 		"inputs": [],
-		"name": "efToken",
+		"name": "tsibToken",
 		"outputs": [
 			{
 				"internalType": "contract IERC20",
@@ -466,7 +466,7 @@ export const efIcoReferralAbi=[
 				"type": "uint256"
 			}
 		],
-		"name": "transferEFTokens",
+		"name": "transfertsibTokens",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

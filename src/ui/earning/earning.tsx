@@ -7,11 +7,11 @@ import TableEarn from "./tableEarn";
 import { useAccount, useBalance, useBlockNumber, useChainId, useReadContract } from "wagmi";
 import { Address, formatEther, zeroAddress } from "viem";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
-import { efTokenAbi } from "@/configs/abi/efTokenAbi";
-import { formatTier, efContractAddresses } from "@/configs";
-import { efInvestAbi } from "@/configs/abi/efInvest";
+import { tsibTokenAbi } from "@/configs/abi/tsibTokenAbi";
+import { formatTier, tsibContractAddresses } from "@/configs";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { rusdAbi } from "@/configs/abi/rusd";
@@ -68,74 +68,42 @@ const Earning = ({ Earning }: props) => {
 
     const resultOfBalance = useReadContract({
         abi: rusdAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.rusd_Token : tsibContractAddresses.pingaksha.rusd_Token,
         functionName: 'balanceOf',
         args: [address as Address],
         account: address
     })
 
-    const resultOfUserInvest = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'user2Invest',
+    const resultOfUserStaker = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'user2Staker',
         args: [address as Address],
         account: zeroAddress
     })
 
-    const resultOfUserInvestLength = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'totalInvestedLengthForUser',
-        args: [address as Address],
-        account: zeroAddress
-    })
-
-
-    const resultOfUserInvestList = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'user2InvestList',
-        args: [address as Address, BigInt(0), Number(resultOfUserInvestLength?.data) > 0 ? resultOfUserInvestLength.data as bigint : BigInt(0)],
-        account: zeroAddress
-    })
-
-    const resultOfUserTierAndBoostRateInPercent = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'getTierAndBoostRateInPercent',
-        args: [Number(resultOfUserInvest?.data?.amount) > 0 ? resultOfUserInvest?.data?.amount as bigint : BigInt(0)],
-        account: zeroAddress
-    })
-
-    const resultOfUsergReferralsCount= useReadContract({
-        abi: efReferralAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-        functionName: 'getReferralsCount',
+    const resultOfUserStakerLength = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'totalStakedLengthForUser',
         args: [address as Address],
         account: zeroAddress
     })
 
 
-
-
-    const {data:mintRatePerDay} = useReadContract({
-        abi: efInvestAbi,
-        address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-        functionName: 'getTierAndBoostRateInPercent',
-        args: [Number(resultOfUserInvest?.data?.amount) > 0 ? resultOfUserInvest?.data?.amount as bigint : BigInt(0)],
-        account: zeroAddress,
-        query:{
-            select(data) {
-                return Number(data[1])/1e2
-            },
-        }
+    const resultOfUserStakerList = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'user2StakerList',
+        args: [address as Address, BigInt(0), Number(resultOfUserStakerLength?.data) > 0 ? resultOfUserStakerLength.data as bigint : BigInt(0)],
+        account: zeroAddress
     })
 
 
 
 
 
-    // const totalUnclaimedRewards= resultOfUserInvestList?.data?.reduce((previousValue,currentValue)=> previousValue+  )
+    // const totalUnclaimedRewards= resultOfUserStakerList?.data?.reduce((previousValue,currentValue)=> previousValue+  )
 
     const Card = [
         {
@@ -146,15 +114,15 @@ const Earning = ({ Earning }: props) => {
         },
         {
             id: 2,
-            Title: 'Your Invest',
-            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserInvest?.data ? resultOfUserInvest.data.amount.toString() : 0)), 3)}`,
-            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserInvest?.data ? resultOfUserInvest.data.amount.toString() : 0))) * 0.05, 3)}`
+            Title: 'Your Stake',
+            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0)), 3)}`,
+            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0))) * 0.05, 3)}`
         },
         {
             id: 3,
             Title: 'Claimed Income',
-            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserInvest?.data ? resultOfUserInvest.data.claimedMintRewards.toString() : 0)), 5)}`,
-            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserInvest?.data ? resultOfUserInvest.data.claimedMintRewards.toString() : 0))) * 0.05, 5)}`
+            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0)), 5)}`,
+            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0))) * 0.05, 5)}`
         },
         {
             id: 4,
@@ -187,8 +155,8 @@ const Earning = ({ Earning }: props) => {
 
     // use to refetch
 useEffect(() => {
-    queryClient.invalidateQueries({ queryKey:resultOfUserInvestList.queryKey }) 
-}, [blockNumber, queryClient,resultOfUserInvestList])
+    queryClient.invalidateQueries({ queryKey:resultOfUserStakerList.queryKey }) 
+}, [blockNumber, queryClient,resultOfUserStakerList])
     return (
         <>
 
@@ -227,7 +195,7 @@ useEffect(() => {
                 </Box>
                 
                  <Box className={classes.boxCr} sx={{ marginTop: '1rem' }}>
-                    <TableEarn resultOfUserInvestList={resultOfUserInvestList?.data} mintRatePerYear={0.00000} />
+                    <TableEarn resultOfUserStakerList={resultOfUserStakerList?.data} mintRatePerYear={0.00000} />
                 </Box>
                 
             </Box>

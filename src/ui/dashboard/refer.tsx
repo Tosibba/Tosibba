@@ -13,7 +13,7 @@ import { UseReadContractsReturnType, useAccount } from "wagmi";
 import linkbtnimg from '../../icons/linkbtnimg.svg'
 import RefBottom from "./refBottom";
 import { Abi, formatEther } from "viem";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral"
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
 
@@ -213,37 +213,43 @@ const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
         {
             id: 1,
             Title: "YOUR REFERRALS",
-            data: '0.00',
+            data1: `${resultOfReferralDetail?.data?.[1].result>0?resultOfReferralDetail?.data?.[1].result.toString():0}`,
+            data2: '',
             image: r1,
         },
         {
             id: 2,
             Title: "YOUR REFERRAL EARNINGS",
-            data: '0.00',
+            data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0)))}`,
+            data2: `$0.00`,
             image: r2,
         },
         {
             id: 3,
             Title: "YOUR LEFT SIDE EARNINGS",
-            data: '0.00',
+            data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.leftBusiness.toString() : 0)))}`,
+            data2: `$0.00`,
             image: r3,
         },
         {
             id: 4,
             Title: "YOUR RIGHT SIDE EARNINGS",
-            data: '0.00',
+            data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rightBusiness.toString() : 0)))}`,
+            data2: `$0.00`,
             image: r4,
         },
         {
             id: 5,
             Title: "YOUR SELF EARNINGS",
-            data: '0.00',
+            data1: `Left Side: ${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[0].toString() : 0)))} Right Side: ${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[1].toString() : 0)))}`,
+            data2: `Left Side: $0.00 Right Side: $0.00`,
             image: r5,
         },
         {
             id: 6,
             Title: "YOUR ELIGIBLE REWARD",
-            data: '0.00',
+            data1: `${resultOfReferralDetail?.data?.[4].result}`,
+            data2: ``,
             image: r6,
         },
 
@@ -259,14 +265,17 @@ const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
                             {refEarning.map((item, index) => (
                                <Grid key={index} item lg={6} md={6} sm={12} xs={12}>
                                 <Box p={1.6} className={classes.step__four2}>
-                                    <Box sx={{
+                                    <Box 
+                                    sx={{
                                         display:'flex',
                                         justifyContent:'space-between',
                                         alignItems:'center'
-                                    }}>
+                                    }}
+                                    >
                                     <Box >
-                                        <Typography color={'#999'}>{item.Title}</Typography>
-                                        <Typography color={'#fff'} variant="h4">{item.data}</Typography>
+                                        <Typography fontSize={20} color={'#999'}>{item.Title}</Typography>
+                                        <Typography fontSize={20} color={'#fff'} variant="h4">{item.data1}</Typography>
+                                        <Typography fontSize={16} color={'#999'}>{item.data2}</Typography>
                                     </Box>
                                     <Box sx={{ backgroundColor: 'transparent !important' }}>
                                         <Image src={item.image} alt={""} />

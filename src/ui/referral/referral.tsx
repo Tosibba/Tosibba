@@ -22,8 +22,8 @@ import linkbtnimg from '../../icons/linkbtnimg.svg'
 import Refer from "../dashboard/refer";
 import Tablereferral from "./tablereferral";
 import { useAccount, useChainId, useReadContracts } from "wagmi";
-import { efReferralAbi } from "@/configs/abi/efReferral";
-import { efContractAddresses } from "@/configs";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
+import { tsibContractAddresses } from "@/configs";
 import { Address } from "viem";
 
 const useStyles = makeStyles({

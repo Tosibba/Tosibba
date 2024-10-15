@@ -27,17 +27,15 @@ import { useEffect, useState } from "react";
 import { useAccount, useBlockNumber, useBalance, useChainId, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Address, formatEther, parseEther, zeroAddress } from "viem";
 import { rusdAbi } from "@/configs/abi/rusd";
-import { efContractAddresses } from "@/configs";
+import { tsibContractAddresses } from "@/configs";
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
-import { efIcoReferralAbi } from "@/configs/abi/efIcoReferral";
-import { efReferralAbi } from "@/configs/abi/efReferral";
+import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 import ContributorsTable from "./contributorsTable";
-// import { efIcoAbi } from "@/configs/abi/efIco";
+// import { tsibIcoAbi } from "@/configs/abi/tsibIco";
 import ConnectWallet from "../shared/connectWallet";
-import { efIcoStakingAbi } from "@/configs/abi/efIcoStaking";
-import { efInvestAbi } from "@/configs/abi/efInvest";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import shortenString from "@/lib/shortenString";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from '@tanstack/react-query'
@@ -352,11 +350,13 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
  
 
-const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAllowance }: any) => {
+const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
     const classes = useStyles();
     const searchParams = useSearchParams()
 
-    const [selectedCardId, setSelectedCardId] = useState<number | null>(null); // Track selected card
+    const [selectedCardId, setSelectedCardId] = useState<number>(0); // Track selected card
+    const [selectJoin,setReferralJoin] =useState<string>('')
+    
 
     const handleCardClick = (id:number) => {
         setSelectedCardId(id); // Update the selected card
@@ -379,6 +379,8 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                         toast.error(extractDetailsFromError(error.message as string) as string)
                     } else {
                         setIsApprovedERC20(true)
+                        setBuyInput('')
+                        setReferrerAddress(null)
                         toast.success("Your TSIB Approved successfully")
                     }
                 },
@@ -396,7 +398,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                     if (error) {
                         toast.error(extractDetailsFromError(error.message as string) as string)
                     } else {
-                        toast.success("Your TSIB Investing successfully")
+                        toast.success("Your TSIB Staking successfully")
                     }
                 },
             }
@@ -406,9 +408,9 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
         hash: data,
     })
 
-    // const resultOfRusdBalance = useReadContract({
-    //     abi: efTokenAbi,
-    //     address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
+    // const resultOfTsibBalance = useReadContract({
+    //     abi: tsibTokenAbi,
+    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
     //     functionName: 'balanceOf',
     //     args: [address as Address],
     //     account: address
@@ -416,12 +418,12 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
 
 
     const handleMax = () => {
-        setBuyInput((formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))))
+        setBuyInput((formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance?.data?.toString() : 0))))
     }
 
-    // const resultOfEfTokenPrice = useReadContract({
-    //     abi: efInvestAbi,
-    //     address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
+    // const resultOftsibTokenPrice = useReadContract({
+    //     abi: tsibStakingAbi,
+    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
     //     functionName: 'getTokenPrice',
     //     args: [],
     //     account: zeroAddress
@@ -430,26 +432,26 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
     const resultOfReferralDetail = useReadContracts({
         contracts: [
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'getReferralRewards',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'getReferralInfo',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferralsCount',
                 args: [address as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
-                functionName: 'isValidReferrerOrInvestor',
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
+                functionName: 'isValidReferrer',
                 args: [address as Address, referrerAddress as Address]
             },
             {
-                abi: efReferralAbi,
-                address: chainId === 1370 ? efContractAddresses.ramestta.ef_referral : efContractAddresses.pingaksha.ef_referral,
+                abi: tsibReferralAbi,
+                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
                 functionName: 'getReferrer',
                 args: [address as Address]
             },
@@ -460,14 +462,14 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
 
 
     // const {data:checkAllowance,queryKey:queryKeyAllowance}=useCheckAllowance({
-    //     spenderAddress: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
+    //     spenderAddress: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking
     //   })
 
     // console.log({resultOfCheckAllowance});
 
     useEffect(() => {
         if (resultOfCheckAllowance && address) {
-            const price = parseFloat(buyInput === "" ? "25" : buyInput)
+            const price = parseFloat(buyInput === "" ? "10000" : buyInput)
             const allowance = parseFloat(formatEther?.(resultOfCheckAllowance.data ?? 0))
             if (allowance >= price) {
                 setIsApprovedERC20(true)
@@ -481,8 +483,8 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
     useEffect(() => {
 
         queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
-        // queryClient.invalidateQueries({ queryKey: resultOfRusdBalance.queryKey })
-        // queryClient.invalidateQueries({ queryKey: resultOfEfTokenPrice.queryKey })
+        // queryClient.invalidateQueries({ queryKey: resultOfTsibBalance.queryKey })
+        // queryClient.invalidateQueries({ queryKey: resultOftsibTokenPrice.queryKey })
         // queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
     }, [blockNumber, queryClient, resultOfCheckAllowance])
 
@@ -522,6 +524,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
 
 
     ]
+    
 
     return (
         <>
@@ -543,7 +546,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                     <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
-                                            formatEther?.(BigInt?.(resultOfEfTokenPrice?.data ? resultOfEfTokenPrice?.data?.toString() : 0))
+                                            formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
                                     ).toFixed(2)
                                     }</Typography> */}
                                     {/* <Typography fontWeight={500} color={'#fff'}>Pre-Sale: $0.1</Typography> */}
@@ -701,10 +704,10 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                     onClick={async () => {
                                                         await approveWriteContractAsync({
                                                             abi: rusdAbi,
-                                                            address: chainId === 1370 ? efContractAddresses.ramestta.rusd_Token : efContractAddresses.pingaksha.rusd_Token,
+                                                            address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
                                                             functionName: 'approve',
                                                             args: [
-                                                                chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest
+                                                                chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking
                                                                 ,
                                                                 Number?.(buyInput) > 0 ? parseEther?.(buyInput) : parseEther?.(BigInt((Number.MAX_SAFE_INTEGER ** 1.3)?.toString())?.toString())
                                                             ],
@@ -724,12 +727,14 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                     disabled={
 
                                                         (!buyInput || isPendingBuyForWrite || isLoading || (
-                                                            buyInput && (Number(buyInput) < 25)
+                                                            buyInput && (Number(buyInput) < 10000)
                                                         ) || (
-                                                                Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                                Number(formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
                                                             ) || (
                                                                 !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
+                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress || (
+                                                                selectJoin===''
+                                                            )
                                                         )
                                                     }
                                                     fullWidth={true}
@@ -737,26 +742,38 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                     sx={{
                                                         opacity: !((
                                                             !buyInput || isPendingBuyForWrite || isLoading || (
-                                                                buyInput && (Number(buyInput) < 25)
+                                                                buyInput && (Number(buyInput) < 10000)
                                                             ) || (
-                                                                Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                                Number(formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
                                                             ) || (
                                                                 !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
+                                                            ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress || (
+                                                                selectJoin===''
+                                                            )
                                                         ))
                                                             ? "1" : '0.3'
                                                     }}
-                                                    onClick={async () => {
-                                                        await writeContractAsync({
-                                                            abi: efInvestAbi,
-                                                            address: chainId === 1370 ? efContractAddresses.ramestta.ef_invest : efContractAddresses.pingaksha.ef_invest,
-                                                            functionName: 'invest',
-                                                            args: [parseEther(buyInput), (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address)],
-                                                            account: address
-                                                        })
+                                                    onClick={async () => { 
+                                                        try {
 
-
-                                                    }} >Invest
+                                                            await writeContractAsync({
+                                                                abi: tsibStakingAbi,
+                                                                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+                                                                functionName: 'stake',
+                                                                args: [
+                                                                    parseEther(buyInput),
+                                                                    BigInt(selectedCardId), 
+                                                                    (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address),
+                                                                    selectJoin==='right'?true:false
+                                                                ],
+                                                                account: address
+                                                            })
+                                                            
+                                                        } catch (error) {
+                                                            console.log(error);
+                                                            
+                                                        }
+                                                    }} >Stake
                                                     {
                                                         (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
                                                     }
@@ -768,13 +785,13 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                 }
 
                                 {
-                                    (buyInput && isAproveERC20 && (Number(buyInput) < 25)) &&
+                                    (buyInput && isAproveERC20 && (Number(buyInput) < 10000)) &&
                                     <Box className={classes.validate__box} >
-                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Contribution $25</Typography>
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Contribution 10000 TSIB</Typography>
                                     </Box>
                                 }
                                 {
-                                    isAproveERC20 && Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0) &&
+                                    isAproveERC20 && Number(formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance?.data.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0) &&
                                     <Box className={classes.validate__box} >
                                         <Typography component={'span'} fontWeight={200} color={'red'}>Insufficient TSIB Balance</Typography>
                                     </Box>
@@ -820,7 +837,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
 
 
                                             </Box>
-                                            {referrerAddress && /^0x[a-fA-F0-9]{40}$/.test(referrerAddress) &&
+                                            {(referrerAddress && resultOfReferralDetail?.data?.[2].result) &&
                                               <Box sx={{
                                                 display: 'flex',
                                                 gap:'10px',
@@ -830,16 +847,17 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                     alignItems: 'baseline',
                                                 }
                                             }}>
-                                                <HoverTool Title={"Select One left side referral or Right side refferal"} />
+                                                <HoverTool Title={"You can Join left side of referral or right side of referral"} />
                                                 <FormControl >
             
                                                     <RadioGroup
                                                         row
                                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                                         name="row-radio-buttons-group"
-            
+                                                        onChange={(e)=>setReferralJoin(e.target.value)}
+                                                        value={selectJoin}
                                                     >
-                                                        <FormControlLabel value="female" control={<Radio sx={{
+                                                        <FormControlLabel value="left" control={<Radio sx={{
                                                             color: '#FBEF03',
             
                                                             '&.Mui-checked': {
@@ -850,7 +868,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                                                 color: '#fff',
                                                             },
                                                         }} />
-                                                        <FormControlLabel value="male" control={<Radio
+                                                        <FormControlLabel value="right" control={<Radio
                                                             sx={{
                                                                 color: '#FBEF03',
                                                                 '&.Mui-checked': {
@@ -879,7 +897,7 @@ const Investing = ({ resultOfRusdBalance, resultOfEfTokenPrice, resultOfCheckAll
                                             <Typography fontWeight={200} color={'#FBEF03'} textAlign={'center'} mt={1}>Note: If you have no any  valid referrer address then you can use this community referrer.</Typography>
                                             <Box sx={{ background: 'linear-gradient(90deg, #08080800, #FBEF03, #08080800)', gap: 1, justifyContent: 'center', padding: 1, display: 'flex', marginTop: '1rem', borderRadius: '8px', alignItems: 'center', }}>
                                                 <Typography component={'h6'} fontWeight={700} color={'#000'}>Referrer:  </Typography>
-                                                <AddressCopy hrefLink={`https://tosibba.com/?ref=0xB664A8D4051d63701A778E18a5aCe0163Ea09477`} text={"0xB664A8D4051d63701A778E18a5aCe0163Ea09477"} addresstext={"0xB66...a09477"} />
+                                                <AddressCopy hrefLink={`https://tosibba.com/?ref=0x32eBca47C2E301e74e8E4bb778F4cDbCBA6eD657`} text={"0x32eBca47C2E301e74e8E4bb778F4cDbCBA6eD657"} addresstext={"0x32e...6eD657"} />
                                             </Box>
                                             {/* </Box> */}
 
