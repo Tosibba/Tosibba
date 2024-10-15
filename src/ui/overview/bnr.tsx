@@ -53,11 +53,9 @@ const useStyles = makeStyles({
 
 
 
-const Bnr = ({resultOfIcoDetail}:any) => {
+const Bnr = () => {
     const classes = useStyles();
 
-      
-    const targetDate = new Date(resultOfIcoDetail?.data ?Number(resultOfIcoDetail?.data?.startAt)*1000: new Date().getTime());
     return (
         <>
             
@@ -85,7 +83,7 @@ const Bnr = ({resultOfIcoDetail}:any) => {
                 <Text text={'goods & assets according.'} />
             </Box> */}
             <Box className={classes.dotBox} mt={2}>
-                <Text text={'Tosibba: Secure, decentralized messaging app powered by'} />
+                <Text text={'Tosibba: Secure, decentralized  app powered by'} />
                 <Text text={"ramestta's web3 technology."} />
             </Box>
                     </Grid>

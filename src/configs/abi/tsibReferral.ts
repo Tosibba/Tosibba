@@ -257,6 +257,29 @@ export const tsibReferralAbi= [
 	{
 		"inputs": [
 			{
+				"internalType": "address payable",
+				"name": "to_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "transferRAMA",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "token_",
+				"type": "address"
+			},
+			{
 				"internalType": "address",
 				"name": "to_",
 				"type": "address"
@@ -267,7 +290,7 @@ export const tsibReferralAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "transferTSIB",
+		"name": "transferTokens",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -349,6 +372,11 @@ export const tsibReferralAbi= [
 		"outputs": [
 			{
 				"components": [
+					{
+						"internalType": "address",
+						"name": "referrer",
+						"type": "address"
+					},
 					{
 						"components": [
 							{
@@ -436,6 +464,11 @@ export const tsibReferralAbi= [
 		"outputs": [
 			{
 				"components": [
+					{
+						"internalType": "address",
+						"name": "referrer",
+						"type": "address"
+					},
 					{
 						"components": [
 							{

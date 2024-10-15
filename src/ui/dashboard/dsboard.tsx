@@ -31,7 +31,6 @@ import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
-import ContributorsTable from "./contributorsTable";
 import ConnectWallet from "../shared/connectWallet";
 import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import shortenString from "@/lib/shortenString";
@@ -406,13 +405,21 @@ const Dsboard = (props: CircularProgressProps) => {
         ]
     })
 
-    // const resultOftsibTokenPrice = useReadContract({
-    //     abi: tsibStakingAbi,
-    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
-    //     functionName: 'getTokenPrice',
-    //     args: [],
-    //     account: zeroAddress
-    // })
+    const resultOfTsibTokenPrice = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'getTokenPrice',
+        args: [],
+        account: zeroAddress
+    })
+    const resultOfUserStaker = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'user2Staker',
+        args: [address as Address],
+        account: zeroAddress
+    })
+    
 
 
     const Box__list = [
@@ -425,39 +432,28 @@ const Dsboard = (props: CircularProgressProps) => {
         {
             image: l2,
             title: 'Self Staking Income',
-            data: `0.0000 TSIB`,
-            valueInUsd: `$0.00000`,
+            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0)), 3)} TSIB`,
+            valueInUsd: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+        )), 3)}`
         },
         {
             image: l3,
             title: 'Your Spot Income',
-            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0)), 4)} TSIB`,
-            valueInUsd: `$0.00000`
-        },
-        // {
-        //     image: l2,
-        //     title: 'Your Team Income',
-        //     data: `$${convertToAbbreviated(formatEther?.(BigInt(Number(resultOfUserTeamReward?.data) > 0 ? resultOfUserTeamReward?.data?.claimedReward as bigint : 0)), 5)}`,
-        // },
-        // {
-        //     image: l2,
-        //     title: 'Your Bounty Income',
-        //     data: `$${convertToAbbreviated(formatEther?.(BigInt(Number(resultOfUserBountyReward?.data) > 0 ? resultOfUserBountyReward?.data?.claimedReward as bigint : 0)), 5)}`
-        // },
-        // {
-        //     image: l2,
-        //     title: 'Your Fix Time Income',
-        //     data: `$0.00000`,
-        // },
+            data: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0)), 3)} TSIB`,
+            valueInUsd: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+        )), 3)}`
+        }
     ]
 
 
     // use to refetch
     useEffect(() => {
-        // queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
         queryClient.invalidateQueries({ queryKey: resultOfTsibBalance.queryKey })
         queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    }, [blockNumber, queryClient,resultOfTsibBalance,resultOfReferralDetail])
+        queryClient.invalidateQueries({ queryKey: resultOfTsibTokenPrice.queryKey })
+    }, [blockNumber, queryClient,resultOfTsibBalance,resultOfReferralDetail,resultOfTsibTokenPrice])
 
 
     
@@ -496,9 +492,10 @@ const Dsboard = (props: CircularProgressProps) => {
                  
                     <HomeTab
                     resultOfTsibBalance={resultOfTsibBalance}
+                    resultOfTsibTokenPrice={resultOfTsibTokenPrice}
                   />
                      <Box mt={4}/>
-                    <Refer resultOfReferralDetail={resultOfReferralDetail} />
+                    <Refer resultOfTsibTokenPrice={resultOfTsibTokenPrice} resultOfReferralDetail={resultOfReferralDetail}/>
 
             </Box>
 

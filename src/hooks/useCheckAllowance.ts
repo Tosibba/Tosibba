@@ -4,11 +4,11 @@ import { Address } from "viem";
 import { tsibContractAddresses } from "@/configs";
 import { rusdAbi } from "@/configs/abi/rusd";
 
-const useCheckAllowance = ({ spenderAddress }: { spenderAddress: Address }) => {
+const useCheckAllowance = ({ spenderAddress,token }: { spenderAddress: Address,token:Address }) => {
     const { address } = useAccount();
     const chainId = useChainId()
     const { data: checkAllowanceContract, isSuccess, queryKey } = useReadContract({
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
+        address: token,
         abi: rusdAbi,
         functionName: "allowance",
         args: [address as Address, spenderAddress],

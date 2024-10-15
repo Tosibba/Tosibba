@@ -68,10 +68,19 @@ const Earning = ({ Earning }: props) => {
 
     const resultOfBalance = useReadContract({
         abi: rusdAbi,
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.rusd_Token : tsibContractAddresses.pingaksha.rusd_Token,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
         functionName: 'balanceOf',
         args: [address as Address],
         account: address
+    })
+
+
+    const resultOfTsibTokenPrice = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'getTokenPrice',
+        args: [],
+        account: zeroAddress
     })
 
     const resultOfUserStaker = useReadContract({
@@ -108,27 +117,33 @@ const Earning = ({ Earning }: props) => {
     const Card = [
         {
             id: 1,
-            Title: 'Ramestta Wallet Balance',
-            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfBalance?.data ? resultOfBalance.data.toString() : 0)), 3)}`,
-            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfBalance?.data ? resultOfBalance.data.toString() : 0))) * 0.05, 3)}`
+            Title: 'Wallet Balance',
+            Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfBalance?.data ? resultOfBalance.data.toString() : 0)), 3)} TSIB`,
+            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfBalance?.data ? resultOfBalance.data.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+        )), 3)}`
         },
         {
             id: 2,
             Title: 'Your Stake',
-            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0)), 3)}`,
-            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0))) * 0.05, 3)}`
+            Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0)), 3)} TSIB`,
+            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.amount.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+        )), 3)}`
         },
         {
             id: 3,
             Title: 'Claimed Income',
-            Amount: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0)), 5)}`,
-            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0))) * 0.05, 5)}`
+            Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0)), 5)} TSIB`,
+            data: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserStaker?.data ? resultOfUserStaker.data.claimedRewards.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+        )), 5)}`
         },
         {
             id: 4,
             Title: 'Unclaimed Income',
-            Amount: `$${
-                "0.00000"
+            Amount: `${
+                "0.00000 TSIB"
             
             }`,
             data: '$0.00000'
@@ -184,7 +199,7 @@ useEffect(() => {
                                     <Box className={classes.Card}>
                                         <Typography color={'#fff'}>{item.Title}</Typography>
                                         <Typography color={'#fff'} variant="h6">{item.Amount}</Typography>
-                                        {/* <Typography color={'#999'}>{item.data}</Typography> */}
+                                        <Typography color={'#999'}>{item.data}</Typography>
                                     </Box>
                                 </Grid>
                             ))}
@@ -195,7 +210,7 @@ useEffect(() => {
                 </Box>
                 
                  <Box className={classes.boxCr} sx={{ marginTop: '1rem' }}>
-                    <TableEarn resultOfUserStakerList={resultOfUserStakerList?.data} mintRatePerYear={0.00000} />
+                    <TableEarn resultOfTsibTokenPrice={resultOfTsibTokenPrice} resultOfUserStakerList={resultOfUserStakerList?.data} mintRatePerYear={0.00000} />
                 </Box>
                 
             </Box>

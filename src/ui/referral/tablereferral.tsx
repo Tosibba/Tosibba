@@ -51,64 +51,10 @@ const useStyles = makeStyles({
 
 
 
-const Tablereferral = ({ referralsCount }: { referralsCount: string }) => {
+const Tablereferral = ({ resultOfTsibTokenPrice, referralsCount }: { resultOfTsibTokenPrice: any, referralsCount: string }) => {
     const classes = useStyles();
     const { address } = useAccount()
     const chainId = useChainId()
-
-    // const TableList = [
-    //     {
-    //         id: 1,
-    //         Userprofile: p1,
-    //         ProfileAddress: "0xcc5...be31",
-    //         Bonus: '57',
-    //         Profit: '1,021',
-    //         sa: '10'
-
-    //     },
-    //     {
-    //         id: 2,
-    //         Userprofile: p2,
-    //         ProfileAddress: "0x2eb...7176",
-    //         Bonus: '10',
-    //         Profit: '1,210',
-    //         sa: '10'
-    //     },
-    //     {
-    //         id: 3,
-    //         Userprofile: p3,
-    //         ProfileAddress: "0x614...7419",
-    //         Bonus: '22',
-    //         Profit: '1,252',
-    //         sa: '10'
-    //     },
-    //     {
-    //         id: 4,
-    //         Userprofile: p4,
-    //         ProfileAddress: "0x247...12a3",
-    //         Bonus: '37',
-    //         Profit: '1,345',
-    //         sa: '10'
-    //     },
-    //     {
-    //         id: 5,
-    //         Userprofile: p5,
-    //         ProfileAddress: "0xe7d...31e2",
-    //         Bonus: '29',
-    //         Profit: '1,879',
-    //         sa: '10'
-    //     },
-    //     {
-    //         id: 6,
-    //         Userprofile: p6,
-    //         ProfileAddress: "0x6ac...0be7",
-    //         Bonus: '12',
-    //         Profit: '18,521',
-    //         sa: '10'
-    //     },
-
-    // ]
-
 
     const resultOfDirectReferrals = useReadContract({
         abi: tsibReferralAbi,
@@ -117,9 +63,6 @@ const Tablereferral = ({ referralsCount }: { referralsCount: string }) => {
         args: [address as Address, BigInt(0), Number(referralsCount as string) > 0 ? BigInt(referralsCount as string) : BigInt(0)],
         account: zeroAddress
     })
-
-console.log(resultOfDirectReferrals?.data?.[0]?.[0]?.user);
-
 
     return (
 
@@ -152,33 +95,35 @@ console.log(resultOfDirectReferrals?.data?.[0]?.[0]?.user);
                                                 alignItems: 'center'
                                             }}>
                                                 <Image src={r2} alt={""} width={50} />
-                                                <AddressCopy 
-                                             textColor="#00ffff !important" 
-                                             hrefLink={
-                                                chainId===1370?`https://ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}`:
-                                                `https://pingaksha.ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}`
-                                             } 
-                                             text={resultOfDirectReferrals.data[0][index].user as string} 
-                                             addresstext={shortenString(resultOfDirectReferrals.data[0][index].user as Address)}/>
+                                                <AddressCopy
+                                                    textColor="#00ffff !important"
+                                                    hrefLink={
+                                                        chainId === 1370 ? `https://ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}` :
+                                                            `https://pingaksha.ramascan.com/address/${resultOfDirectReferrals.data[0][index].user}`
+                                                    }
+                                                    text={resultOfDirectReferrals.data[0][index].user as string}
+                                                    addresstext={shortenString(resultOfDirectReferrals.data[0][index].user as Address)} />
                                             </Box>
                                         </TableCell>
                                         <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                             <Typography color={'#fff'}>{resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))),3)}  TSIB
+                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))), 3)}  TSIB
                                                     </>
                                                 )
                                                 : '-'}
                                             </Typography>
                                             <Typography color={'#999'}>
-                                            {resultOfDirectReferrals.data[1][index] ?
-                                                (
-                                                    <>
-                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString())))*0.05,3)}
-                                                    </>
-                                                )
-                                                : '-'}
+                                                {resultOfDirectReferrals.data[1][index] ?
+                                                    (
+                                                        <>
+                                                            {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * (Number(
+                                                                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                                            )), 3)}
+                                                        </>
+                                                    )
+                                                    : '-'}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">{resultOfDirectReferrals.data[0][index].side}</TableCell>
@@ -187,19 +132,21 @@ console.log(resultOfDirectReferrals?.data?.[0]?.[0]?.user);
                                             <Typography color={'#fff'}>{resultOfDirectReferrals.data[1][index] ?
                                                 (
                                                     <>
-                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1,3)}  TSIB
+                                                        {convertToAbbreviated(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1, 3)}  TSIB
                                                     </>
                                                 )
                                                 : '-'}
                                             </Typography>
                                             <Typography color={'#999'}>
-                                            {resultOfDirectReferrals.data[1][index] ?
-                                                (
-                                                    <>
-                                                        {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1 * 0.05,3)}
-                                                    </>
-                                                )
-                                                : '-'}
+                                                {resultOfDirectReferrals.data[1][index] ?
+                                                    (
+                                                        <>
+                                                            {formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfDirectReferrals.data[1][index].toString()))) * 0.1 * (Number(
+                                                                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                                            )), 3)}
+                                                        </>
+                                                    )
+                                                    : '-'}
                                             </Typography>
                                         </TableCell>
 

@@ -8,6 +8,16 @@ export const tsibStakingAbi= [
 			},
 			{
 				"internalType": "address",
+				"name": "rusdToken_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ramaPriceInUSD_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
 				"name": "referralContract_",
 				"type": "address"
 			}
@@ -108,6 +118,31 @@ export const tsibStakingAbi= [
 		"inputs": [],
 		"name": "WithdrawalPeriodNotReached",
 		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "qty",
+				"type": "uint256"
+			}
+		],
+		"name": "Buy",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -317,6 +352,19 @@ export const tsibStakingAbi= [
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "buy",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "user_",
 				"type": "address"
@@ -490,12 +538,38 @@ export const tsibStakingAbi= [
 	},
 	{
 		"inputs": [],
+		"name": "getTokenPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ramaPriceInUSD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -519,6 +593,19 @@ export const tsibStakingAbi= [
 		"name": "renounceOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rusdToken",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -636,6 +723,29 @@ export const tsibStakingAbi= [
 	{
 		"inputs": [
 			{
+				"internalType": "address payable",
+				"name": "to_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "transferRAMA",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "token_",
+				"type": "address"
+			},
+			{
 				"internalType": "address",
 				"name": "to_",
 				"type": "address"
@@ -646,7 +756,7 @@ export const tsibStakingAbi= [
 				"type": "uint256"
 			}
 		],
-		"name": "transferTSIB",
+		"name": "transferTokens",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -678,6 +788,19 @@ export const tsibStakingAbi= [
 			}
 		],
 		"name": "unstake",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "currentRamaPrice_",
+				"type": "uint256"
+			}
+		],
+		"name": "updateRamaPriceInUSD",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

@@ -18,7 +18,7 @@ import Footer from "../shared/footer";
 import { useBalance, useChainId, useReadContract } from "wagmi";
 import { formatEther, zeroAddress } from "viem";
 import { tsibContractAddresses } from "@/configs";
-import { tsibIcoAbi } from "@/configs/abi/tsibIco";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 
 
 
@@ -34,7 +34,7 @@ const Homecmp = () => {
 
     const chainId = useChainId()
     const {data:ramaBalanceOfIco}=useBalance({
-        address: chainId===1370?tsibContractAddresses.ramestta.tsib_ico:tsibContractAddresses.pingaksha.tsib_ico,
+        address: chainId===1370?tsibContractAddresses.ramestta.tsib_staking:tsibContractAddresses.pingaksha.tsib_staking,
         query:{
             select(data) {
                 return Number(formatEther(data.value))
@@ -42,8 +42,8 @@ const Homecmp = () => {
         }
       })
     const {data:ramaPriceInUSD} = useReadContract({
-        abi: tsibIcoAbi ,
-        address: chainId===1370?tsibContractAddresses.ramestta.tsib_ico:tsibContractAddresses.pingaksha.tsib_ico,
+        abi: tsibStakingAbi ,
+        address: chainId===1370?tsibContractAddresses.ramestta.tsib_staking:tsibContractAddresses.pingaksha.tsib_staking,
         functionName: 'ramaPriceInUSD',
         account: zeroAddress,
         query:{
@@ -52,13 +52,7 @@ const Homecmp = () => {
             },
         }
       }) 
-      const resultOfIcoDetail = useReadContract({
-        abi: tsibIcoAbi ,
-        address: chainId===1370?tsibContractAddresses.ramestta.tsib_ico:tsibContractAddresses.pingaksha.tsib_ico,
-        functionName: 'saleType2IcoDetail',
-        args: [0],
-        account: zeroAddress
-      }) 
+
 
     return (
 
@@ -80,10 +74,10 @@ const Homecmp = () => {
                 }}>
 
                     <Header />
-                    <Bnr resultOfIcoDetail={resultOfIcoDetail} />
+                    <Bnr />
 
                 </Box>
-                <Countribution ramaPriceInUSD={ramaPriceInUSD} ramaBalanceOfIco={ramaBalanceOfIco} />
+                {/* <Countribution ramaPriceInUSD={ramaPriceInUSD} ramaBalanceOfIco={ramaBalanceOfIco} /> */}
                 <Box
                     sx={{
                         padding: '3rem 0rem',

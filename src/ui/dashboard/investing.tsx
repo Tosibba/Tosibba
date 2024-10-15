@@ -32,8 +32,6 @@ import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
 
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
-import ContributorsTable from "./contributorsTable";
-// import { tsibIcoAbi } from "@/configs/abi/tsibIco";
 import ConnectWallet from "../shared/connectWallet";
 import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import shortenString from "@/lib/shortenString";
@@ -350,7 +348,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
  
 
-const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
+const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance,resultOfTsibTokenPrice }: any) => {
     const classes = useStyles();
     const searchParams = useSearchParams()
 
@@ -380,7 +378,6 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
                     } else {
                         setIsApprovedERC20(true)
                         setBuyInput('')
-                        setReferrerAddress(null)
                         toast.success("Your TSIB Approved successfully")
                     }
                 },
@@ -398,6 +395,8 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
                     if (error) {
                         toast.error(extractDetailsFromError(error.message as string) as string)
                     } else {
+                        setBuyInput('')
+                        setReferrerAddress(null)
                         toast.success("Your TSIB Staking successfully")
                     }
                 },
@@ -408,26 +407,10 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
         hash: data,
     })
 
-    // const resultOfTsibBalance = useReadContract({
-    //     abi: tsibTokenAbi,
-    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
-    //     functionName: 'balanceOf',
-    //     args: [address as Address],
-    //     account: address
-    // })
-
 
     const handleMax = () => {
         setBuyInput((formatEther?.(BigInt?.(resultOfTsibBalance?.data ? resultOfTsibBalance?.data?.toString() : 0))))
     }
-
-    // const resultOftsibTokenPrice = useReadContract({
-    //     abi: tsibStakingAbi,
-    //     address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
-    //     functionName: 'getTokenPrice',
-    //     args: [],
-    //     account: zeroAddress
-    // })
 
     const resultOfReferralDetail = useReadContracts({
         contracts: [
@@ -484,9 +467,8 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
 
         queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
         // queryClient.invalidateQueries({ queryKey: resultOfTsibBalance.queryKey })
-        // queryClient.invalidateQueries({ queryKey: resultOftsibTokenPrice.queryKey })
-        // queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    }, [blockNumber, queryClient, resultOfCheckAllowance])
+        queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
+    }, [blockNumber, queryClient, resultOfCheckAllowance,resultOfReferralDetail])
 
     const initialLocationsData2 = [
         {
@@ -543,12 +525,12 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
 
 
                                 <Box className={classes.currentsale2} mt={2}>
-                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography>
-                                    {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
+                                    {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : $0.00</Typography> */}
+                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
-                                            formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
-                                    ).toFixed(2)
-                                    }</Typography> */}
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                    ).toFixed(4)
+                                    }</Typography>
                                     {/* <Typography fontWeight={500} color={'#fff'}>Pre-Sale: $0.1</Typography> */}
                                 </Box>
 
@@ -579,7 +561,7 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
 
                                                     <Typography fontSize={14} color={'#fff'}>{item.title}</Typography>
                                                     <Typography fontSize={14} color={'#fff'} fontWeight={600} variant="h6">{item.data}</Typography>
-                                                    <Typography fontSize={14} color={'#fff'}>Total 200%</Typography>
+                                                    <Typography fontSize={14} color={'#fff'}>Total Return 200%</Typography>
 
                                                 </Box>
                                             </Grid>
@@ -787,7 +769,7 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance }: any) => {
                                 {
                                     (buyInput && isAproveERC20 && (Number(buyInput) < 10000)) &&
                                     <Box className={classes.validate__box} >
-                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Contribution 10000 TSIB</Typography>
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Stake 10k TSIB</Typography>
                                     </Box>
                                 }
                                 {

@@ -11,11 +11,12 @@ import Heading from '@/theme/components/heading';
 import Referral from './referral';
 import Tablereferral from './tablereferral';
 import Refer from '../dashboard/refer';
-import { useAccount, useBlockNumber, useChainId, useReadContracts } from 'wagmi';
+import { useAccount, useBlockNumber, useChainId, useReadContract, useReadContracts } from 'wagmi';
 import { tsibReferralAbi } from '@/configs/abi/tsibReferral';
+import { tsibStakingAbi } from '@/configs/abi/tsibStaking';
 import { tsibContractAddresses } from '@/configs';
-import { Address } from 'viem';
-// import Tablereferral2 from './tablereferral2';
+import { Address, zeroAddress } from 'viem';
+import Tablereferral2 from './tablereferral2';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from "react";
 // import Tablereferraldownline from './tablereferraldownline';
@@ -128,15 +129,23 @@ export default function ReferralTab() {
             },
         ]
     })
+    const resultOfTsibTokenPrice = useReadContract({
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        functionName: 'getTokenPrice',
+        args: [],
+        account: zeroAddress
+    })
     // use to refetch
     useEffect(() => {
         queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    }, [blockNumber, queryClient,resultOfReferralDetail])
+        queryClient.invalidateQueries({ queryKey: resultOfTsibTokenPrice.queryKey })
+    }, [blockNumber, queryClient,resultOfReferralDetail,resultOfTsibTokenPrice])
 
     return (
         <Box className={classes.mainDiv}>
 
-            <Refer resultOfReferralDetail={resultOfReferralDetail} />
+            <Refer resultOfTsibTokenPrice={resultOfTsibTokenPrice} resultOfReferralDetail={resultOfReferralDetail} />
 
             <Box sx={{ width: '100%', border: '1px solid #595c61', borderRadius: '8px', marginTop: '1.5rem' }}>
 
@@ -169,7 +178,7 @@ export default function ReferralTab() {
                     <Box className={classes.boxref} mt={2}>
                         <Referral refTitle={'Direct Referral'} />
                         <Box sx={{ marginTop: '1rem' }}>
-                            <Tablereferral referralsCount={resultOfReferralDetail?.data?.[1].result?.toString() as string} />
+                            <Tablereferral resultOfTsibTokenPrice={resultOfTsibTokenPrice} referralsCount={resultOfReferralDetail?.data?.[1].result?.toString() as string} />
                         </Box>
 
 
@@ -179,7 +188,7 @@ export default function ReferralTab() {
                     <Box className={classes.boxref} mt={2}>
                         <Referral refTitle={'Upline Referral'} />
                         <Box sx={{ marginTop: '1rem' }}>
-                            <Tablereferral2 />
+                            <Tablereferral2 resultOfTsibTokenPrice={resultOfTsibTokenPrice} />
                         </Box>
                     </Box>
                 </CustomTabPanel> */}

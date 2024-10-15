@@ -84,7 +84,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function HomeTab({resultOfTsibBalance}:any) {
+export default function HomeTab({resultOfTsibBalance,resultOfTsibTokenPrice}:any) {
     const classes = useStyles();
     const { address } = useAccount()
     const chainId = useChainId()
@@ -98,17 +98,25 @@ export default function HomeTab({resultOfTsibBalance}:any) {
     const colorMode = React.useContext(ColorModeContext);
     const theme = useTheme();
 
-    const resultOfCheckAllowance = useCheckAllowance({
-        spenderAddress: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking
+    const resultOfTsibCheckAllowance = useCheckAllowance({
+        spenderAddress: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        token: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token
     })
+
+    const resultOfRusdCheckAllowance = useCheckAllowance({
+        spenderAddress: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+        token: chainId === 1370 ? tsibContractAddresses.ramestta.rusd_Token : tsibContractAddresses.pingaksha.rusd_Token
+    })
+
 
 
     // use to refetch
     useEffect(() => {
 
-        queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfTsibCheckAllowance.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfRusdCheckAllowance.queryKey })
 
-    }, [blockNumber, queryClient, resultOfCheckAllowance])
+    }, [blockNumber, queryClient, resultOfTsibCheckAllowance,resultOfRusdCheckAllowance])
 
 
     return (
@@ -146,14 +154,15 @@ export default function HomeTab({resultOfTsibBalance}:any) {
                 <CustomTabPanel value={value} index={0}>
                 <Investing
                 resultOfTsibBalance={resultOfTsibBalance}
-                resultOfCheckAllowance={resultOfCheckAllowance}
+                resultOfCheckAllowance={resultOfTsibCheckAllowance}
+                resultOfTsibTokenPrice={resultOfTsibTokenPrice}
             />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                 <Buy
                     resultOfRusdBalance={resultOfTsibBalance} 
-                    // resultOftsibTokenPrice={resultOftsibTokenPrice}
-                    resultOfCheckAllowance={resultOfCheckAllowance}
+                    resultOfCheckAllowance={resultOfRusdCheckAllowance}
+                    resultOfTsibTokenPrice={resultOfTsibTokenPrice}
                  />
                 </CustomTabPanel>
                  

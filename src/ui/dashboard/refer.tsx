@@ -15,6 +15,7 @@ import RefBottom from "./refBottom";
 import { Abi, formatEther } from "viem";
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral"
 import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
+import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 
 
 const useStyles = makeStyles({
@@ -168,7 +169,7 @@ const useStyles = makeStyles({
     step__four2: {
         border: '1px solid #595c61',
         borderRadius: '12px',
-        
+
 
 
     },
@@ -203,7 +204,7 @@ const useStyles = makeStyles({
 
 });
 
-const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
+const Refer = ({ resultOfTsibTokenPrice, resultOfReferralDetail }: { resultOfTsibTokenPrice: any, resultOfReferralDetail: any }) => {
     const classes = useStyles();
 
     const { address } = useAccount();
@@ -213,7 +214,7 @@ const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
         {
             id: 1,
             Title: "YOUR REFERRALS",
-            data1: `${resultOfReferralDetail?.data?.[1].result>0?resultOfReferralDetail?.data?.[1].result.toString():0}`,
+            data1: `${resultOfReferralDetail?.data?.[1].result > 0 ? resultOfReferralDetail?.data?.[1].result.toString() : 0}`,
             data2: '',
             image: r1,
         },
@@ -221,28 +222,30 @@ const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
             id: 2,
             Title: "YOUR REFERRAL EARNINGS",
             data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0)))}`,
-            data2: `$0.00`,
+            data2: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rewards.toString() : 0))) * (Number(
+                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+            )), 3)}`,
             image: r2,
         },
         {
             id: 3,
             Title: "YOUR LEFT SIDE EARNINGS",
-            data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.leftBusiness.toString() : 0)))}`,
-            data2: `$0.00`,
+            data1: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.leftBusiness.toString() : 0)))}`,
+            data2: ``,
             image: r3,
         },
         {
             id: 4,
             Title: "YOUR RIGHT SIDE EARNINGS",
-            data1: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rightBusiness.toString() : 0)))}`,
-            data2: `$0.00`,
+            data1: `$${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[0].result ? resultOfReferralDetail?.data?.[0].result.rightBusiness.toString() : 0)))}`,
+            data2: ``,
             image: r4,
         },
         {
             id: 5,
             Title: "YOUR SELF EARNINGS",
-            data1: `Left Side: ${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[0].toString() : 0)))} Right Side: ${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[1].toString() : 0)))}`,
-            data2: `Left Side: $0.00 Right Side: $0.00`,
+            data1: `Left Side: $${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[0].toString() : 0)))} Right Side: $${convertToAbbreviated(formatEther?.(BigInt?.(resultOfReferralDetail?.data?.[3].result ? resultOfReferralDetail?.data?.[3].result[1].toString() : 0)))}`,
+            data2: ``,
             image: r5,
         },
         {
@@ -258,34 +261,34 @@ const Refer = ({ resultOfReferralDetail }: { resultOfReferralDetail: any }) => {
     return (
         <>
             <Box className={classes.step__four2}>
-               <Box sx={{
-                padding:'1rem'
-               }}>
-               <Grid container spacing={2}  >
-                            {refEarning.map((item, index) => (
-                               <Grid key={index} item lg={6} md={6} sm={12} xs={12}>
+                <Box sx={{
+                    padding: '1rem'
+                }}>
+                    <Grid container spacing={2}  >
+                        {refEarning.map((item, index) => (
+                            <Grid key={index} item lg={6} md={6} sm={12} xs={12}>
                                 <Box p={1.6} className={classes.step__four2}>
-                                    <Box 
-                                    sx={{
-                                        display:'flex',
-                                        justifyContent:'space-between',
-                                        alignItems:'center'
-                                    }}
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }}
                                     >
-                                    <Box >
-                                        <Typography fontSize={20} color={'#999'}>{item.Title}</Typography>
-                                        <Typography fontSize={20} color={'#fff'} variant="h4">{item.data1}</Typography>
-                                        <Typography fontSize={16} color={'#999'}>{item.data2}</Typography>
+                                        <Box >
+                                            <Typography fontSize={20} color={'#999'}>{item.Title}</Typography>
+                                            <Typography fontSize={20} color={'#fff'} variant="h4">{item.data1}</Typography>
+                                            <Typography fontSize={16} color={'#999'}>{item.data2}</Typography>
+                                        </Box>
+                                        <Box sx={{ backgroundColor: 'transparent !important' }}>
+                                            <Image src={item.image} alt={""} />
+                                        </Box>
                                     </Box>
-                                    <Box sx={{ backgroundColor: 'transparent !important' }}>
-                                        <Image src={item.image} alt={""} />
-                                    </Box>
-                                    </Box>
-                                    </Box>
-                                </Grid>
-                            ))}
-                </Grid>
-               </Box>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
                 <RefBottom />
             </Box>
         </>

@@ -65,107 +65,13 @@ const useStyles = makeStyles({
     }
 });
 
-const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserStakerList: any, mintRatePerYear: Number }) => {
+const TableEarn = ({ resultOfTsibTokenPrice, resultOfUserStakerList, mintRatePerYear }: { resultOfTsibTokenPrice: any, resultOfUserStakerList: any, mintRatePerYear: Number }) => {
     const classes = useStyles();
 
     const { address } = useAccount()
     const chainId = useChainId()
     // const queryClient = useQueryClient()
     // const { data: blockNumber } = useBlockNumber({ watch: true })
-
-    // const TableList = [
-    //     {
-    //         id: 1,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Starter',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-    //     {
-    //         id: 2,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Silver',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-    //     {
-    //         id: 3,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Gold',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-    //     {
-    //         id: 4,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Platinum',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-    //     {
-    //         id: 5,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Daimond',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-    //     {
-    //         id: 6,
-    //         Userprofile: ef,
-    //         ProfileAddress: "0xcc5...be31",
-    //         stakeAmount: 8000,
-    //         stakeDate: '0.00',
-    //         reward: '100',
-    //         rewardData: '0.00',
-    //         startTime: 'Jun 12 2024 23:11:38 PM',
-    //         lastClaim: 'Jun 12 2024 23:11:38 PM',
-    //         tier: 'Elite',
-    //         tri365d: '1000',
-    //         tcr: '100',
-    //         rr: '10'
-    //     },
-
-    // ];
 
     const Reward = ({ index }: { index: number }) => {
         const mintReward = useReadContract({
@@ -181,7 +87,7 @@ const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserSt
                     if (error) {
                         toast.error(extractDetailsFromError(error.message as string) as string)
                     } else {
-                        toast.success("Reward claimed successfully")
+                        toast.success("Reward Withdraw successfully")
                     }
                 },
             }
@@ -223,7 +129,9 @@ const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserSt
                         }
                     </Button>
                 </Typography>
-                <Typography color={'#999'}>${Number(mintReward?.data) > 0 ? (Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))) * 0.05).toFixed(5) : '0.00000'}</Typography>
+                <Typography color={'#999'}>${Number(mintReward?.data) > 0 ? (Number(formatEther?.(BigInt?.(mintReward?.data ? mintReward.data.toString() : 0))) * ((Number(
+                    formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                )))).toFixed(5) : '0.00000'}</Typography>
             </TableCell>
         )
     }
@@ -343,7 +251,9 @@ const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserSt
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                         <Typography color={'#fff'}>{convertToAbbreviated(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0)), 3)} TSIB</Typography>
-                                        <Typography color={'#999'}>{formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) * 0.05, 3)}</Typography>
+                                        <Typography color={'#999'}>{formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) * (Number(
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                        )), 3)}</Typography>
                                     </TableCell>
 
                                     <Package id={item?.packageId} />
@@ -352,15 +262,21 @@ const TableEarn = ({ resultOfUserStakerList, mintRatePerYear }: { resultOfUserSt
 
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                         <Typography color={'#fff'}>{convertToAbbreviated((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100), 5)} TSIB</Typography>
-                                        <Typography color={'#999'}>{formatNumberToCurrencyString((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) * 0.05, 5)}</Typography>
+                                        <Typography color={'#999'}>{formatNumberToCurrencyString((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) * (Number(
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                        )), 5)}</Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                                        <Typography color={'#fff'}>${convertToAbbreviated(formatEther?.(BigInt?.(item?.claimedMintRewards ? item.claimedMintRewards.toString() : 0)), 5)} </Typography>
-                                        {/* <Typography color={'#999'}>{formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.claimedMintRewards ? item.claimedMintRewards.toString() : 0))) * 0.5, 5)}</Typography> */}
+                                        <Typography color={'#fff'}>{convertToAbbreviated(formatEther?.(BigInt?.(item?.claimedRewards ? item.claimedRewards.toString() : 0)), 5)} TSIB</Typography>
+                                        <Typography color={'#999'}>${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item?.claimedRewards ? item.claimedRewards.toString() : 0))) * (Number(
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                        )), 5)}</Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
-                                        <Typography color={'#fff'}>${convertToAbbreviated(((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) - Number(formatEther?.(BigInt?.(item?.claimedMintRewards ? item.claimedMintRewards.toString() : 0)))), 5)} </Typography>
-                                        {/* <Typography color={'#999'}>{formatNumberToCurrencyString(((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) - Number(formatEther?.(BigInt?.(item?.claimedMintRewards ? item.claimedMintRewards.toString() : 0)))) * 0.05, 5)}</Typography> */}
+                                        <Typography color={'#fff'}>{convertToAbbreviated(((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) - Number(formatEther?.(BigInt?.(item?.claimedRewards ? item.claimedRewards.toString() : 0)))), 5)} TSIB </Typography>
+                                        <Typography color={'#999'}>${formatNumberToCurrencyString(((Number(mintRatePerYear) * Number(formatEther?.(BigInt?.(item?.amount ? item.amount.toString() : 0))) / 100) - Number(formatEther?.(BigInt?.(item?.claimedRewards ? item.claimedRewards.toString() : 0)))) * (Number(
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                        )), 5)}</Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: '1px solid #595c61', padding: 1, color: '#fff' }} align="left">
                                         <Typography color={'#fff'}>{new Date(Number(item?.startTime) * 1000).toLocaleString()}</Typography>

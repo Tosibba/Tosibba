@@ -33,9 +33,9 @@ import rusd from '../../icons/rusd.svg'
 import rlogo from '../../icons/rlogo.svg'
 
 import { tsibReferralAbi } from "@/configs/abi/tsibReferral";
+import { rusdAbi } from "@/configs/abi/rusd";
 import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
-import ContributorsTable from "./contributorsTable";
-import { tsibIcoAbi } from "@/configs/abi/tsibIco";
+import { tsibStakingAbi } from "@/configs/abi/tsibStaking";
 import ConnectWallet from "../shared/connectWallet";
 import shortenString from "@/lib/shortenString";
 import { useSearchParams } from "next/navigation";
@@ -151,7 +151,7 @@ const useStyles = makeStyles({
     },
     rama__log: {
         backgroundColor: '#311250',
-         
+
         borderRadius: '12px',
         display: 'flex',
         justifyContent: 'center',
@@ -341,14 +341,14 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 
-const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}:any) => {
+const Buy = ({ resultOfRusdBalance, resultOfTsibTokenPrice, resultOfCheckAllowance }: any) => {
     const classes = useStyles();
     const [valueTop, setValueTop] = useState<number>(1);
     const searchParams = useSearchParams()
     const [buyInput, setBuyInput] = useState("")
     // const [showInput, setShowInput] = useState<boolean>(false);
     const refParam = searchParams.get('ref')
-    const [referrerAddress, setReferrerAddress] = useState<string | null>(refParam)
+    const [isAproveERC20, setIsApprovedERC20] = useState(true);
     const { address } = useAccount()
     const chainId = useChainId()
     const queryClient = useQueryClient()
@@ -356,9 +356,28 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
 
     const [selectedCardId, setSelectedCardId] = useState<number>(0); // Track selected card
 
-    const handleCardClick = (id:number) => {
+    const handleCardClick = (id: number) => {
         setSelectedCardId(id); // Update the selected card
     };
+
+    const { writeContractAsync: approveWriteContractAsync, data: approveData, isPending: isPendingApproveForWrite } = useWriteContract(
+        {
+            mutation: {
+                onSettled(data, error, variables, context) {
+                    if (error) {
+                        toast.error(extractDetailsFromError(error.message as string) as string)
+                    } else {
+                        setIsApprovedERC20(true)
+                        setBuyInput('')
+                        toast.success("Your RUSD Approved successfully")
+                    }
+                },
+            }
+        }
+    )
+    const { isLoading: isLoadingApprove } = useWaitForTransactionReceipt({
+        hash: approveData,
+    })
 
     const { writeContractAsync, data, isPending: isPendingBuyForWrite } = useWriteContract(
         {
@@ -367,7 +386,8 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                     if (error) {
                         toast.error(extractDetailsFromError(error.message as string) as string)
                     } else {
-                        toast.success("Your TSIB Buy successfully")
+                        setBuyInput('')
+                        toast.success("Your RUSD Staking successfully")
                     }
                 },
             }
@@ -377,119 +397,51 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
         hash: data,
     })
 
+
     const balanceOfRama = useBalance({
         address: address
     })
 
 
     const handleMax = () => {
-        setBuyInput((formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))))
+        setBuyInput((formatEther?.(BigInt?.(
+            !selectedCardId ?
+                balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0
+                : resultOfRusdBalance?.data ? resultOfRusdBalance?.data.toString() : 0
+        ))))
     }
-    // const handleChange = (event: Event, newValue: number) => {
-    //     setValueTop(newValue);
-    // }
-
-    const resultOfSaleDetails = useReadContract({
-        abi: tsibIcoAbi,
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
-        functionName: 'saleType2IcoDetail',
-        args: [0],
-        account: zeroAddress
-    })
-
-    const [value2, setValue2] = useState<number>(0);
-    const [initialProgressValue, setInitialProgressValue] = useState<number>(0);
-    useEffect(() => {
-        if (resultOfSaleDetails?.data) {
-            const tokenAmount = BigInt(resultOfSaleDetails.data.tokenAmount?.toString() || '0');
-            const saleQuantity = BigInt(resultOfSaleDetails.data.saleQuantity?.toString() || '0');
-            const tokenAmountInEther = Number(formatEther(tokenAmount));
-            const saleQuantityInEther = Number(formatEther(saleQuantity));
-
-            if (!initialProgressValue) {
-                setInitialProgressValue(tokenAmountInEther);
-            }
-
-            setValue2(((tokenAmountInEther - (tokenAmountInEther - saleQuantityInEther)) > 0 ? (tokenAmountInEther - (tokenAmountInEther - saleQuantityInEther)) : 0));
-        }
 
 
-    }, [resultOfSaleDetails?.data, initialProgressValue]);
-
-
-
-
-    const progressValue = initialProgressValue > 0 ? ((initialProgressValue - value2) / initialProgressValue) * 100 : 0;
-
-
-    const resultOfUserContribution = useReadContract({
-        abi: tsibIcoAbi,
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
-        functionName: 'user2SaleType2Contributor',
-        args: [address as Address, 0],
-        account: zeroAddress
-    })
 
     const resultOfRamaPriceInUSD = useReadContract({
-        abi: tsibIcoAbi,
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
+        abi: tsibStakingAbi,
+        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
         functionName: 'ramaPriceInUSD',
         args: [],
         account: zeroAddress
     })
 
-    const resultOfBalance = useReadContract({
-        abi: tsibTokenAbi,
-        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_token : tsibContractAddresses.pingaksha.tsib_token,
-        functionName: 'balanceOf',
-        args: [address as Address],
-        account: address
-    })
 
-
-    const resultOfReferralDetail = useReadContracts({
-        contracts: [
-            {
-                abi: tsibReferralAbi,
-                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
-                functionName: 'getReferralInfo',
-                args: [address as Address]
-            },
-            {
-                abi: tsibReferralAbi,
-                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
-                functionName: 'getReferralsCount',
-                args: [address as Address]
-            },
-            {
-                abi: tsibReferralAbi,
-                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
-                functionName: 'isValidReferrer',
-                args: [address as Address, referrerAddress as Address]
-            },
-            {
-                abi: tsibReferralAbi,
-                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_referral : tsibContractAddresses.pingaksha.tsib_referral,
-                functionName: 'getReferrer',
-                args: [address as Address]
-            },
-        ]
-    })
-
-    // const handleChange2 = (event: Event, newValue: number) => {
-    //     setValue2(newValue);
-    // };
+    useEffect(() => {
+        if (resultOfCheckAllowance && address) {
+            const price = parseFloat(buyInput === "" ? "20" : buyInput)
+            const allowance = parseFloat(formatEther?.(resultOfCheckAllowance.data ?? 0))
+            if (allowance >= price) {
+                setIsApprovedERC20(true)
+            } else {
+                setIsApprovedERC20(false)
+            }
+        }
+    }, [resultOfCheckAllowance, address, buyInput]);
 
     // use to refetch
-    // useEffect(() => {
-    //     queryClient.invalidateQueries({ queryKey: balanceOfRama.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfSaleDetails.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfUserContribution.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfRamaPriceInUSD.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfBalance.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfUserTeamReward.queryKey })
-    //     queryClient.invalidateQueries({ queryKey: resultOfReferralDetail.queryKey })
-    // }, [blockNumber, queryClient, balanceOfRama, resultOfSaleDetails, resultOfUserContribution, resultOfRamaPriceInUSD, resultOfBalance, resultOfUserTeamReward, resultOfReferralDetail])
+    useEffect(() => {
+
+        queryClient.invalidateQueries({ queryKey: resultOfCheckAllowance.queryKey })
+        queryClient.invalidateQueries({ queryKey: balanceOfRama.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfRusdBalance.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfTsibTokenPrice.queryKey })
+    }, [blockNumber, queryClient, resultOfCheckAllowance, balanceOfRama, resultOfRusdBalance,resultOfTsibTokenPrice])
 
     const Box__list = [
 
@@ -497,16 +449,16 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
             id: 0,
             title: 'RAMA',
             img: rusd,
-             
+
 
         },
         {
             id: 1,
             title: 'RUSD',
-            img:rlogo,
-            
+            img: rlogo,
+
         },
-        
+
 
 
     ]
@@ -609,35 +561,44 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     </Box>
 
                                 </Box> */}
-                                
+
                                 <Box sx={{
-                                    gap:'1rem'
+                                    gap: '1rem'
                                 }} className={classes.currentsale2} mt={2}>
-                                <Typography fontWeight={500} color={'#fff'}>{selectedCardId ? "RUSD" : "RAMA"} Price : $0.00</Typography>
-                                    {/* <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
+
+                                    {
+                                        selectedCardId === 0 &&
+                                        <Typography fontWeight={500} color={'#fff'}>RAMA Price :
+                                            ${
+                                                Number(
+                                                    formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0))
+                                                ).toFixed(4)
+                                            }</Typography>
+
+                                    }
+                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price : ${
                                         Number(
-                                            formatEther?.(BigInt?.(resultOftsibTokenPrice?.data ? resultOftsibTokenPrice?.data?.toString() : 0))
-                                    ).toFixed(2)
-                                    }</Typography> */}
-                                    <Typography fontWeight={500} color={'#fff'}>TSIB Price: $0.00</Typography>
+                                            formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0))
+                                        ).toFixed(4)
+                                    }</Typography>
                                 </Box>
 
-                               <Grid container spacing={1.2}>
-                               {Box__list.map((item, index)=>(
-                                    <Grid key={index} item lg={6} md={6} sm={6} xs={6}>
-                                        <Box  className={classes.rama__log}
-                                    onClick={() => handleCardClick(item.id)}
-                                    sx={{
-                                        border: selectedCardId === item.id ? '1px solid #FBEF03' : '1px solid #595c61', // Border change on selection
-                                        cursor: 'pointer',
-                                    }}
-                                    >
-                                        <Image src={item.img} alt={""} width={36} height={36}/>
-                                        <Typography variant="h6" fontWeight={500} color={'#fff'}>{item.title}</Typography>
-                                    </Box>
+                                <Grid container spacing={1.2}>
+                                    {Box__list.map((item, index) => (
+                                        <Grid key={index} item lg={6} md={6} sm={6} xs={6}>
+                                            <Box className={classes.rama__log}
+                                                onClick={() => handleCardClick(item.id)}
+                                                sx={{
+                                                    border: selectedCardId === item.id ? '1px solid #FBEF03' : '1px solid #595c61', // Border change on selection
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                <Image src={item.img} alt={""} width={36} height={36} />
+                                                <Typography variant="h6" fontWeight={500} color={'#fff'}>{item.title}</Typography>
+                                            </Box>
                                         </Grid>
-                                ))}
-                               </Grid>
+                                    ))}
+                                </Grid>
 
                                 <Box className={classes.max_btn__wrap}>
                                     <InputBase
@@ -665,10 +626,10 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                     />
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
                                 </Box>
-                                {/* <Box className={classes.worth}>
-                                    {(resultOfRamaPriceInUSD?.data && buyInput) ?(
+                                <Box className={classes.worth}>
+                                    {!selectedCardId && (resultOfRamaPriceInUSD?.data && buyInput) && (
 
-                
+
                                         <>
                                             <Box className={classes.box_List}>
                                                 <Image src={dollar} alt={""} width={40} />
@@ -678,123 +639,236 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                             Number(
                                                                 formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
                                                         )
-                                                        ).toFixed(2)
+                                                        ).toFixed(4)
 
                                                     }
                                                     </Typography>
                                                 </Typography>
                                             </Box>
 
-                                            <Box className={classes.box_List}>
-                                                <Image src={rmesta} alt={""} width={40} />
-                                                <Typography color={'#999'}>RUSD PRICE:
-                                                    <Typography component={'span'} color={'#fff'}> ${
-                                                        Number(
-                                                            formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
-                                                    }
-                                                    </Typography>
-                                                </Typography>
-                                            </Box>
                                         </>
-                                    ) :null
-                                }
-                                    <Box className={classes.box_List}>
-                                        <Image src={shield} alt={""} width={50} />
-                                        <Typography color={'#999'}>TSIB WORTH : <Typography component={'span'} color={'#fff'}>{
-                                            buyInput && resultOfRamaPriceInUSD?.data && resultOfSaleDetails?.data ? ((Number(Number(buyInput) > 0 ? buyInput : 0) *
-                                                Number(
-                                                    formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
-                                            ) /
-                                                Number(
-                                                    formatEther?.(BigInt?.(resultOfSaleDetails?.data?.saleRateInUsd ? resultOfSaleDetails?.data?.saleRateInUsd.toString() : 0)))
-                                            ).toFixed(2) : "0.00"
-                                        }</Typography></Typography>
+                                    ) 
+                                    }
+                                        <Box className={classes.box_List}>
+                                        <Image src={shield} alt={""} width={40} />
+                                        <Typography color={'#999'}>TSIB Receive:
+                                            <Typography component={'span'} color={'#fff'}> {
+                                                buyInput && resultOfRamaPriceInUSD?.data && resultOfTsibTokenPrice?.data ?
+                                                    !selectedCardId ?
+                                                        (0.99*((Number(Number(buyInput) > 0 ? buyInput : 0) *
+                                                            Number(
+                                                                formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
+                                                        ) /
+                                                            Number(
+                                                                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0)))
+                                                        )).toFixed(4)
+                                                        :
+                                                        (0.99*((Number(Number(buyInput) > 0 ? buyInput : 0)) /
+                                                            Number(
+                                                                formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0)))
+                                                        )).toFixed(4)
+                                                    : "0.00"
+                                    }</Typography>(
+                                        {
+                                             buyInput && resultOfRamaPriceInUSD?.data && resultOfTsibTokenPrice?.data ?
+                                             !selectedCardId ?
+                                                 (0.01*((Number(Number(buyInput) > 0 ? buyInput : 0) *
+                                                     Number(
+                                                         formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
+                                                 ) /
+                                                     Number(
+                                                         formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0)))
+                                                 )).toFixed(4)
+                                                 :
+                                                 (0.01*((Number(Number(buyInput) > 0 ? buyInput : 0)) /
+                                                     Number(
+                                                         formatEther?.(BigInt?.(resultOfTsibTokenPrice?.data ? resultOfTsibTokenPrice?.data?.toString() : 0)))
+                                                 )).toFixed(4)
+                                             : '0.00'
+                                        } Burn
+                                    )</Typography>
                                     </Box>
-                                </Box> */}
+                                </Box>
 
                                 {address ?
-                                    // <Button
+                                    (
+                                        selectedCardId ?
+                                            (
+                                                !isAproveERC20 ?
+                                                    (
+                                                        <Button
 
-                                    //     disabled={
+                                                            disabled={
 
-                                    //         (!buyInput || isPendingBuyForWrite || isLoading || (
-                                    //             buyInput && (Number(buyInput) *
-                                    //                 Number(
-                                    //                     formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
-                                    //             ) < 10
-                                    //         ) || (
-                                    //                 Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
-                                    //             ) || (
-                                    //                 !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                    //             ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
-                                    //         )
-                                    //     }
-                                    //     fullWidth={true}
-                                    //     className={classes.buy__btn}
-                                    //     sx={{
-                                    //         opacity: !((
-                                    //             !buyInput || isPendingBuyForWrite || isLoading || (
-                                    //                 buyInput && (Number(buyInput) *
-                                    //                     Number(
-                                    //                         formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
-                                    //                 ) < 10
-                                    //             ) || (
-                                    //                 Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
-                                    //             ) || (
-                                    //                 !referrerAddress || !resultOfReferralDetail?.data?.[2].result
-                                    //             ) && resultOfReferralDetail?.data?.[3]?.result === zeroAddress
-                                    //         ))
-                                    //             ? "1" : '0.3'
-                                    //     }}
-                                    //     onClick={async () => {
-                                    //         await writeContractAsync({
-                                    //             abi: tsibIcoAbi,
-                                    //             address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_ico : tsibContractAddresses.pingaksha.tsib_ico,
-                                    //             functionName: 'buy',
-                                    //             args: [0, (resultOfReferralDetail?.data?.[3]?.result !== zeroAddress ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress as Address)],
-                                    //             account: address,
-                                    //             value: parseEther(buyInput),
-                                    //         })
+                                                                (isPendingApproveForWrite || isLoadingApprove)
+
+                                                            }
+                                                            fullWidth={true}
+                                                            className={classes.buy__btn}
+                                                            sx={{
+                                                                opacity: !(
+                                                                    isPendingApproveForWrite || isLoadingApprove
+                                                                )
+                                                                    ? "1" : '0.3'
+                                                            }}
+                                                            onClick={async () => {
+                                                                await approveWriteContractAsync({
+                                                                    abi: rusdAbi,
+                                                                    address: chainId === 1370 ? tsibContractAddresses.ramestta.rusd_Token : tsibContractAddresses.pingaksha.rusd_Token,
+                                                                    functionName: 'approve',
+                                                                    args: [
+                                                                        chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking
+                                                                        ,
+                                                                        Number?.(buyInput) > 0 ? parseEther?.(buyInput) : parseEther?.(BigInt((Number.MAX_SAFE_INTEGER ** 1.3)?.toString())?.toString())
+                                                                    ],
+                                                                    account: address
+                                                                })
 
 
-                                    //     }} >Buy
-                                    //     {
-                                    //         (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
-                                    //     }
-                                    // </Button>
-                                    <Box>
-                                        {selectedCardId ? <Button
-                                        disabled={true}
-                                        fullWidth={true}
-                                        className={classes.buy__btn}
-                                        sx={{
-                                            opacity: '0.3',
-                                            marginTop:'1rem'
-                                        }}
-                                    >Approve RUSD
+                                                            }} >Approve RUSD
+                                                            {
+                                                                (isPendingApproveForWrite || isLoadingApprove) && <CircularProgress size={18} color="inherit" />
+                                                            }
+                                                        </Button>
+                                                    )
+                                                    : (
+                                                        <Button
 
-                                    </Button> : ''}
-                                    </Box>
-                                   
+                                                            disabled={
+
+                                                                (!buyInput || isPendingBuyForWrite || isLoading || (
+                                                                    buyInput && (Number(buyInput) < 20)
+                                                                ) || (
+                                                                        Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                                    )
+                                                                )
+                                                            }
+                                                            fullWidth={true}
+                                                            className={classes.buy__btn}
+                                                            sx={{
+                                                                opacity: !((
+                                                                    !buyInput || isPendingBuyForWrite || isLoading || (
+                                                                        buyInput && (Number(buyInput) < 20)
+                                                                    ) || (
+                                                                        Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data?.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                                    )
+                                                                ))
+                                                                    ? "1" : '0.3'
+                                                            }}
+                                                            onClick={async () => {
+                                                                try {
+
+                                                                    await writeContractAsync({
+                                                                        abi: tsibStakingAbi,
+                                                                        address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+                                                                        functionName: 'buy',
+                                                                        args: [
+                                                                            parseEther(buyInput)
+                                                                        ],
+                                                                        account: address
+                                                                    })
+
+                                                                } catch (error) {
+                                                                    console.log(error);
+
+                                                                }
+                                                            }} >Buy TSIB
+                                                            {
+                                                                (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
+                                                            }
+                                                        </Button>
+                                                    )
+                                            )
+                                            :
+                                            (
+                                                <Button
+
+                                                    disabled={
+
+                                                        (!buyInput || isPendingBuyForWrite || isLoading || (
+                                                            buyInput && (Number(buyInput) *
+                                                                Number(
+                                                                    formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
+                                                            ) < 20
+                                                        ) || (
+                                                                Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                            )
+                                                        )
+                                                    }
+                                                    fullWidth={true}
+                                                    className={classes.buy__btn}
+                                                    sx={{
+                                                        opacity: !((
+                                                            !buyInput || isPendingBuyForWrite || isLoading || (
+                                                                buyInput && (Number(buyInput) *
+                                                                    Number(
+                                                                        formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
+                                                                ) < 20
+                                                            ) || (
+                                                                Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                                            )
+                                                        ))
+                                                            ? "1" : '0.3'
+                                                    }}
+                                                    onClick={async () => {
+                                                        try {
+
+                                                            await writeContractAsync({
+                                                                abi: tsibStakingAbi,
+                                                                address: chainId === 1370 ? tsibContractAddresses.ramestta.tsib_staking : tsibContractAddresses.pingaksha.tsib_staking,
+                                                                functionName: 'buy',
+                                                                args: [
+                                                                    BigInt(0)
+                                                                ],
+                                                                account: address,
+                                                                value: parseEther(buyInput)
+                                                            })
+
+                                                        } catch (error) {
+                                                            console.log(error);
+
+                                                        }
+                                                    }} >Buy TSIB
+                                                    {
+                                                        (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
+                                                    }
+                                                </Button>
+                                            )
+                                    )
                                     :
                                     <ConnectWallet />
                                 }
 
-                                {/* {
-                                    buyInput && (Number(buyInput) *
+                                {
+                                    (!selectedCardId && buyInput && (Number(buyInput) *
                                         Number(
                                             formatEther?.(BigInt?.(resultOfRamaPriceInUSD?.data ? resultOfRamaPriceInUSD.data.toString() : 0)))
-                                    ) < 10 &&
+                                    ) < 20) &&
                                     <Box className={classes.validate__box} >
-                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Contribution $10</Typography>
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Buy $20</Typography>
                                     </Box>
                                 }
                                 {
-                                    Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0) &&
+                                    ( isAproveERC20 && selectedCardId && buyInput && (Number(buyInput)
+
+                                    ) < 20) &&
                                     <Box className={classes.validate__box} >
-                                        <Typography component={'span'} fontWeight={200} color={'red'}>Insufficient TSIB Balance</Typography>
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Minimum Buy $20</Typography>
                                     </Box>
-                                } */}
+                                }
+                                {
+                                    (!selectedCardId &&
+                                        Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                    ) && <Box className={classes.validate__box} >
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Insufficient {selectedCardId ? "RUSD" : "RAMA"} Balance</Typography>
+                                    </Box>
+                                }{
+                                    (isAproveERC20 && selectedCardId && Number(formatEther?.(BigInt?.(resultOfRusdBalance?.data ? resultOfRusdBalance?.data.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                                    ) &&
+                                    <Box className={classes.validate__box} >
+                                        <Typography component={'span'} fontWeight={200} color={'red'}>Insufficient {selectedCardId ? "RUSD" : "RAMA"} Balance</Typography>
+                                    </Box>
+                                }
 
                                 {/* {
                                     !showInput && (
@@ -802,11 +876,11 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                             <Typography component={'span'} fontWeight={200} color={'#fff'}>Do you have any Referrer?</Typography>
                                         </Box>
                                     )
-                                } */}
-                                {
+                                }
+                                {/* {
                                     (resultOfReferralDetail?.data && resultOfReferralDetail?.data?.[3]?.result === zeroAddress) && (
                                         <Box>
-                                            {/* <Box className={classes.apply_btn__wrap}>
+                                            <Box className={classes.apply_btn__wrap}>
                                                 <InputBase
                                                     value={referrerAddress}
                                                     onChange={(e) => setReferrerAddress(e.target.value as Address)}
@@ -835,7 +909,7 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                 }} className={classes.max_btn} onClick={(e) => setReferrerAddress((resultOfReferralDetail?.data && resultOfReferralDetail?.data?.[3]?.result !== zeroAddress) ? resultOfReferralDetail?.data?.[3]?.result as Address : referrerAddress)} >Apply</Button>
 
 
-                                            </Box> */}
+                                            </Box>
                                             {
                                                 (referrerAddress && !resultOfReferralDetail?.data?.[2].result) && (
 
@@ -843,17 +917,17 @@ const Buy = ({resultOfRusdBalance,resultOftsibTokenPrice,resultOfCheckAllowance}
                                                         <Typography component={'span'} fontWeight={200} color={'red'}>Your Referrer is Invalid</Typography>
                                                     </Box>
                                                 )}
-                                            {/* <Box className={classes.validate__box} >
+                                            <Box className={classes.validate__box} >
                                             <Typography fontWeight={200} color={'#FBEF03'} textAlign={'center'} mt={1}>Note: If you have no any  valid referrer address then you can use this community referrer.</Typography>
                                             <Box sx={{ background: 'linear-gradient(90deg, #08080800, #FBEF03, #08080800)', gap: 1, justifyContent: 'center', padding: 1, display: 'flex', marginTop: '1rem', borderRadius: '8px', alignItems: 'center', }}>
                                                 <Typography component={'h6'} fontWeight={700} color={'#000'}>Referrer:  </Typography>
                                                 <AddressCopy hrefLink={`https://tosibba.com/?ref=0xBE4A7Ae76F7cceD70e0aec65aBd74DC84BB9D9C9`} text={"0xBE4A7Ae76F7cceD70e0aec65aBd74DC84BB9D9C9"} addresstext={"0xBE4...BB9D9C9"} />
                                             </Box>
-                                            </Box> */}
+                                            </Box>
 
 
                                         </Box>
-                                    )}
+                                    )} */}
                             </Box>
 
                         </Box>
