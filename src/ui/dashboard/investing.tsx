@@ -587,6 +587,9 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance,resultOfTsibTok
                                             ':-moz-placeholder': {
                                                 color: 'fff',
                                             },
+                                            '@media(max-width : 600px)': {
+                                                            fontSize: '13px',
+                                                        },
                                             '& input[type=number]': {
                                                 '-moz-appearance': 'textfield',
                                             },
@@ -802,7 +805,7 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance,resultOfTsibTok
                                                             color: 'fff',
                                                         },
                                                         '@media(max-width : 600px)': {
-                                                            fontSize: '11px',
+                                                            fontSize: '13px',
                                                         }
                                                     }}
                                                     fullWidth

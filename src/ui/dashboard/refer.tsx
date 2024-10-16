@@ -169,6 +169,7 @@ const useStyles = makeStyles({
     step__four2: {
         border: '1px solid #595c61',
         borderRadius: '12px',
+        height:'100%'
 
 
 
@@ -276,9 +277,21 @@ const Refer = ({ resultOfTsibTokenPrice, resultOfReferralDetail }: { resultOfTsi
                                         }}
                                     >
                                         <Box >
-                                            <Typography fontSize={20} color={'#999'}>{item.Title}</Typography>
-                                            <Typography fontSize={20} color={'#fff'} variant="h4">{item.data1}</Typography>
-                                            <Typography fontSize={16} color={'#999'}>{item.data2}</Typography>
+                                            <Typography sx={{
+                                                '@media(max-width : 600px)':{
+                                                    fontSize:'15px'
+                                                }
+                                            }} fontSize={20} color={'#999'}>{item.Title}</Typography>
+                                            <Typography sx={{
+                                                '@media(max-width : 600px)':{
+                                                    fontSize:'15px'
+                                                }
+                                            }} fontSize={20} color={'#fff'} variant="h4">{item.data1}</Typography>
+                                            <Typography sx={{
+                                                '@media(max-width : 600px)':{
+                                                    fontSize:'15px'
+                                                }
+                                            }} fontSize={16} color={'#999'}>{item.data2}</Typography>
                                         </Box>
                                         <Box sx={{ backgroundColor: 'transparent !important' }}>
                                             <Image src={item.image} alt={""} />

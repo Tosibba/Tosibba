@@ -321,7 +321,11 @@ const useStyles = makeStyles({
     box_List: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
+        '@media(max-width : 600px)':{
+            flexWrap:'wrap',
+            justifyContent:'center'
+        }
     }
 
 });
@@ -612,6 +616,9 @@ const Buy = ({ resultOfRusdBalance, resultOfTsibTokenPrice, resultOfCheckAllowan
                                             ':-moz-placeholder': {
                                                 color: 'fff',
                                             },
+                                            '@media(max-width : 600px)': {
+                                                fontSize: '13px',
+                                            },
                                             '& input[type=number]': {
                                                 '-moz-appearance': 'textfield',
                                             },
@@ -626,12 +633,13 @@ const Buy = ({ resultOfRusdBalance, resultOfTsibTokenPrice, resultOfCheckAllowan
                                     />
                                     <Button className={classes.max_btn} onClick={handleMax} href={""} >Max</Button>
                                 </Box>
+                                 
                                 <Box className={classes.worth}>
                                     {!selectedCardId && (resultOfRamaPriceInUSD?.data && buyInput) && (
 
 
                                         <>
-                                            <Box className={classes.box_List}>
+                                            <Box className={classes.box_List} mt={2}>
                                                 <Image src={dollar} alt={""} width={40} />
                                                 <Typography color={'#999'}>COST:
                                                     <Typography component={'span'} color={'#fff'}> ${
