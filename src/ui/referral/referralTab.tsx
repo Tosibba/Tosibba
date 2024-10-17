@@ -184,14 +184,14 @@ export default function ReferralTab() {
 
                     </Box>
                 </CustomTabPanel>
-                {/* <CustomTabPanel value={value} index={1}>
+                <CustomTabPanel value={value} index={1}>
                     <Box className={classes.boxref} mt={2}>
                         <Referral refTitle={'Upline Referral'} />
                         <Box sx={{ marginTop: '1rem' }}>
                             <Tablereferral2 resultOfTsibTokenPrice={resultOfTsibTokenPrice} />
                         </Box>
                     </Box>
-                </CustomTabPanel> */}
+                </CustomTabPanel>
 
                 {/* <CustomTabPanel value={value} index={2}>
                     <Box className={classes.boxref} mt={2}>

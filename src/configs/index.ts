@@ -98,8 +98,8 @@ export const tsibContractAddresses: TsibContractAddressesType = {
     tsib_ico: "0xF14CFCA3D7f35815024197a117eA82d2816Fbc23",
     tsib_ico_referral: "0xe7A53699DE32B1e33492cbf5398744498B3D2ddc",
     tsib_ico_staking: "0xE91A1C7B5689d918D40aAA848CDA96dbAa2aba67",
-    tsib_staking: "0xFE684506309fc55524FeDc68679A6c3CF858ee49",
-    tsib_referral: "0x6e34282c5ccea7Da90af8d5666d21C4C7DcaBa80"
+    tsib_staking: "0x9743f9Bee015d9ccc63bBA9001d86586D83289ED",
+    tsib_referral: "0x4cb06C8b567071ADDa4B9B938eF6c8C557669Bbb"
 
   },
   pingaksha: {
