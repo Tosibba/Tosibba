@@ -487,14 +487,14 @@ const Investing = ({ resultOfTsibBalance, resultOfCheckAllowance,resultOfTsibTok
         {
             id: 0,
             title: '0.33% Daily',
-            data: `Withdraw period 20 months`,
+            data: `Withdraw period 1 months`,
             package: 'A'
 
         },
         {
             id: 1,
             title: '0.44% Daily',
-            data: `Withdraw period 15 months`,
+            data: `Withdraw period 3 months`,
             package: 'B'
         },
         {
